@@ -1,0 +1,69 @@
+---
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site';
+
+const year = new Date().getFullYear();
+const socials = site.social.filter((s) => s.href);
+---
+
+<footer class="border-t border-line">
+  <div class="container-page grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr]">
+    <div>
+      <Logo />
+      <p class="mt-4 max-w-xs text-sm text-muted">{site.slogan}.</p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <h2 class="font-mono text-xs tracking-wider text-subtle uppercase">Navegación</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="text-muted hover:text-fg">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="/#contacto" class="text-muted hover:text-fg">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="font-mono text-xs tracking-wider text-subtle uppercase">Contacto</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        <li><a href={`mailto:${site.contact.email}`} class="text-muted hover:text-fg">{site.contact.email}</a></li>
+        {
+          site.contact.whatsapp && (
+            <li>
+              <a href={`https://wa.me/${site.contact.whatsapp}`} class="text-muted hover:text-fg" rel="noopener">
+                WhatsApp
+              </a>
+            </li>
+          )
+        }
+        <li>
+          <a href={site.founder.linkedin} class="text-muted hover:text-fg" rel="noopener">
+            LinkedIn del fundador
+          </a>
+        </li>
+        {
+          socials.map((s) => (
+            <li>
+              <a href={s.href} class="text-muted hover:text-fg" rel="noopener me">
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-line">
+    <div class="container-page flex flex-col gap-2 py-6 text-xs text-subtle sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {site.name}. Todos los derechos reservados.</p>
+      <a href="/privacidad" class="hover:text-fg">Política de privacidad</a>
+    </div>
+  </div>
+</footer>

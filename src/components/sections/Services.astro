@@ -1,0 +1,90 @@
+---
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { industries, softwarePillars } from '../../data/site';
+---
+
+<section id="servicios" tabindex="-1" class="border-t border-line bg-surface/30 py-28 sm:py-40" aria-labelledby="servicios-title">
+  <div class="container-page">
+    <SectionHeading
+      id="servicios-title"
+      eyebrow="Software a medida"
+      title="Elige tu rubro y mira qué cambia."
+      intro="Software que ordena tu operación. Empleados IA que atienden a tus clientes. Juntos."
+    />
+
+    <div class="rubros reveal mx-auto mt-14 max-w-5xl">
+      <!-- Selector de rubro: radios nativos (flechas del teclado incluidas, funciona sin JavaScript) -->
+      <fieldset class="flex min-w-0 justify-center">
+        <legend class="visually-hidden">Elige tu rubro</legend>
+        <div class="rubro-tabs">
+          {
+            industries.map((industry, i) => (
+              <label class="rubro-tab">
+                <input type="radio" name="rubro" value={industry.id} checked={i === 0} />
+                <Icon name={industry.icon} class="size-4" strokeWidth={1.75} />
+                {industry.name}
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="mt-10">
+        {
+          industries.map((industry) => (
+            <div class="rubro-panel stagger" aria-label={`Qué cambia en ${industry.name}`} role="group">
+              <div class="rubro-card rubro-card--today">
+                <p class="rubro-label">Hoy</p>
+                <p class="rubro-text">
+                  <s>{industry.today}</s>
+                </p>
+              </div>
+
+              <span class="rubro-arrow" aria-hidden="true">
+                <Icon name="arrow" class="size-5" />
+              </span>
+
+              <div class="rubro-card">
+                <p class="rubro-label">
+                  <Icon name="code" class="size-4" />
+                  Software Amply
+                </p>
+                <p class="rubro-text">{industry.software}</p>
+              </div>
+
+              <span class="rubro-arrow rubro-arrow--plus" aria-hidden="true">
+                +
+              </span>
+
+              <div class="rubro-card rubro-card--ai">
+                <p class="rubro-label">
+                  <Icon name="agent" class="size-4" />
+                  Empleado IA
+                </p>
+                <p class="rubro-text">{industry.ai}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <ul class="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-3 border-t border-line pt-8 text-sm text-muted">
+        {
+          softwarePillars.map((pillar) => (
+            <li class="flex items-center gap-2">
+              <Icon name={pillar.icon} class="size-4 text-accent" />
+              {pillar.href ? (
+                <a href={pillar.href} class="underline-offset-4 hover:text-fg hover:underline">
+                  {pillar.title}
+                </a>
+              ) : (
+                pillar.title
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

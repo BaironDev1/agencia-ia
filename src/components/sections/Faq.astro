@@ -1,0 +1,28 @@
+---
+import Icon from '../Icon.astro';
+import { faqs } from '../../data/site';
+---
+
+<section id="preguntas" tabindex="-1" class="border-t border-line bg-surface/30 py-28 sm:py-40" aria-labelledby="preguntas-title">
+  <div class="container-page grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+    <div class="reveal lg:sticky lg:top-28 lg:self-start">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2 id="preguntas-title" class="text-title mt-5">Lo que nos preguntan antes de partir.</h2>
+      <a href="#contacto" class="btn btn-ghost mt-8">
+        Hacer una pregunta
+        <Icon name="arrow" strokeWidth={2} />
+      </a>
+    </div>
+
+    <div class="faq reveal border-t border-line">
+      {
+        faqs.map((faq) => (
+          <details>
+            <summary>{faq.question}</summary>
+            <p class="max-w-2xl pb-6 pl-[1.875rem] text-muted">{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

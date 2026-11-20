@@ -1,0 +1,36 @@
+---
+import FounderCard from '../FounderCard.astro';
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { principles } from '../../data/site';
+---
+
+<section id="nosotros" tabindex="-1" class="border-t border-line bg-surface/30 py-28 sm:py-40" aria-labelledby="nosotros-title">
+  <div class="container-page">
+    <div class="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+      <div>
+        <SectionHeading
+          id="nosotros-title"
+          align="left"
+          eyebrow="Por qué nosotros"
+          title="Tecnología seria. Trato de persona a persona."
+        />
+        <FounderCard class="mt-10" />
+      </div>
+
+      <ul class="stagger grid content-start gap-4">
+        {
+          principles.map((item) => (
+            <li class="card flex gap-5 p-6">
+              <Icon name={item.icon} class="size-6 shrink-0 text-accent" />
+              <div>
+                <h3 class="text-lg font-medium">{item.title}</h3>
+                <p class="mt-1 text-[0.9375rem] text-muted">{item.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

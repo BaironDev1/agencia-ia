@@ -8,6 +8,10 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Design rules
+
+Before changing any page, component, copy or style, read [DESIGN.md](DESIGN.md). Its rules are strict: concise copy in the voice of datawalt.cl, generous spacing, software before AI employees, day and night themes, theme tokens only, no invented testimonials or figures.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

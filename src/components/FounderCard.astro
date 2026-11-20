@@ -1,0 +1,59 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+const { founder } = site;
+const initials = founder.name
+  .split(/\s+/)
+  .map((part) => part[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+
+<figure class:list={['card reveal p-5 sm:p-6', className]}>
+  <figcaption class="flex items-center gap-5">
+    {
+      founder.photo ? (
+        <img
+          src={founder.photo}
+          alt={`Foto de ${founder.name}`}
+          width="128"
+          height="128"
+          loading="lazy"
+          decoding="async"
+          class="size-24 shrink-0 rounded-2xl object-cover ring-1 ring-line-strong sm:size-32"
+        />
+      ) : (
+        <span
+          class="grid size-24 shrink-0 place-items-center rounded-2xl bg-accent-soft text-2xl font-medium text-accent ring-1 ring-accent/25 ring-inset sm:size-32"
+          aria-hidden="true"
+        >
+          {initials}
+        </span>
+      )
+    }
+    <div class="min-w-0">
+      <p class="text-lg font-medium text-fg sm:text-xl">{founder.name}</p>
+      <p class="mt-0.5 text-sm text-muted">{founder.role} de {site.name}</p>
+      <a
+        href={founder.linkedin}
+        target="_blank"
+        rel="noopener"
+        class="mt-3 inline-flex min-h-10 items-center gap-2 rounded-full border border-line-strong px-3.5 text-sm font-medium text-fg transition-colors hover:border-line-hover hover:bg-hover"
+      >
+        <Icon name="linkedin" class="size-4" />
+        Ver perfil en LinkedIn
+        <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+      </a>
+    </div>
+  </figcaption>
+  <blockquote class="mt-5 border-t border-line pt-5 text-[1.0625rem] leading-relaxed text-fg">
+    <p>“{founder.quote}”</p>
+  </blockquote>
+</figure>

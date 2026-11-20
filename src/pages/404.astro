@@ -1,0 +1,23 @@
+---
+import Icon from '../components/Icon.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Página no encontrada" noindex>
+  <section class="relative isolate overflow-hidden" aria-labelledby="nf-title">
+    <div class="bg-grid pointer-events-none absolute inset-0 -z-10" aria-hidden="true"></div>
+    <div class="container-page flex min-h-[80dvh] flex-col items-start justify-center pt-32 pb-24">
+      <p class="eyebrow">Error 404</p>
+      <h1 id="nf-title" class="text-display mt-6 max-w-3xl">
+        Esta página <em class="font-serif text-[1.08em] font-normal text-accent">no existe</em>.
+      </h1>
+      <p class="mt-6 max-w-lg text-lg text-muted">
+        Puede que el enlace esté roto o que la página haya cambiado de dirección.
+      </p>
+      <a href="/" class="btn btn-primary mt-10">
+        Volver al inicio
+        <Icon name="arrow" strokeWidth={2} />
+      </a>
+    </div>
+  </section>
+</Layout>

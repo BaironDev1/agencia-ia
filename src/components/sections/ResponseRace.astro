@@ -1,0 +1,102 @@
+---
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+
+/*
+ * La misma consulta llega por los tres caminos que tiene una pyme hoy y
+ * cada uno "corre" hasta la respuesta. Ilustrativo: no son mediciones reales.
+ */
+const lanes = [
+  {
+    id: 'equipo',
+    name: 'Tu equipo',
+    detail: 'Responde cuando llega a la oficina.',
+    result: '~2 horas',
+    note: 'agendó en otra automotora',
+    tone: 'slow',
+  },
+  {
+    id: 'formulario',
+    name: 'Formulario web',
+    detail: 'Si alguien lo revisa.',
+    result: 'Nunca',
+    note: 'el mensaje se perdió',
+    tone: 'lost',
+  },
+  {
+    id: 'amply',
+    name: 'Empleado IA',
+    detail: 'Responde, cotiza y agenda la prueba de manejo.',
+    result: '~5 segundos',
+    note: 'prueba de manejo agendada',
+    tone: 'fast',
+  },
+] as const;
+---
+
+<section id="carrera" tabindex="-1" class="border-t border-line bg-surface/30 py-28 sm:py-40" aria-labelledby="carrera-title">
+  <div class="container-page">
+    <SectionHeading
+      id="carrera-title"
+      eyebrow="3:14 de la madrugada"
+      title="¿Cuánto tarda tu empresa en responder?"
+      intro="El mismo mensaje llega por los tres caminos que existen hoy. Mira cuál responde."
+    />
+
+    <figure class="race reveal mx-auto mt-16 max-w-5xl" data-race>
+      <p class="race-question">
+        <Icon name="chat" class="size-4 shrink-0" />
+        «¿La SUV 2024 sigue disponible? ¿Puedo verla el sábado?»
+      </p>
+
+      <ol class="mt-8 grid gap-4 sm:gap-2">
+        {
+          lanes.map((lane) => (
+            <li class:list={['race-lane', `race-lane--${lane.tone}`]}>
+              <div class="race-name">
+                <p class="font-medium text-fg">{lane.name}</p>
+                <p class="text-sm text-muted">{lane.detail}</p>
+              </div>
+
+              <div class="race-track" aria-hidden="true">
+                <span class="race-progress"></span>
+              </div>
+
+              <p class="race-result">
+                <span class="race-time">{lane.result}</span>
+                <span class="race-note">
+                  {lane.tone === 'fast' && <Icon name="check" class="size-3.5" strokeWidth={2.5} />}
+                  {lane.note}
+                </span>
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <figcaption class="mt-10 text-center text-sm text-subtle">
+        Ilustrativo. Tu empleado IA atiende 24/7; tu equipo de ventas llega a la cita con un cliente que ya sabe lo que quiere.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<script>
+  // La carrera corre una vez, cuando entra en pantalla (solo si se permite movimiento).
+  const race = document.querySelector<HTMLElement>('[data-race]');
+  const motionOk = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+  if (race && motionOk && 'IntersectionObserver' in window) {
+    race.dataset.animate = '';
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          race.classList.add('is-running');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(race);
+  }
+</script>

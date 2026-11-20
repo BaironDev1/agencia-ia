@@ -1,0 +1,21 @@
+---
+import { wordmarkRatio, wordmarkSvg } from '../assets/brand/logo';
+import { site } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// Solo el wordmark: la "m" de arcos aparece una vez. Letras en el color del
+// texto y el arco alto en el verde del tema (cambia con día/noche).
+const logo = wordmarkSvg(
+  { fg: 'currentColor', accent: 'var(--color-accent)' },
+  ` width="${Math.round(28 * wordmarkRatio)}" height="28" class="h-7 w-auto" aria-hidden="true" focusable="false"`,
+);
+---
+
+<a href="/" class:list={['inline-flex items-center text-fg no-underline', className]} aria-label={`${site.name}, inicio`}>
+  <Fragment set:html={logo} />
+</a>

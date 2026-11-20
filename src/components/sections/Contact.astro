@@ -1,0 +1,440 @@
+---
+import Icon from '../Icon.astro';
+import { companySizes, contactTopics, dailyConversations, site } from '../../data/site';
+
+const { email, whatsapp, location, formEndpoint } = site.contact;
+const { founder } = site;
+const usesMailto = !formEndpoint;
+
+const nextSteps = [
+  'Te respondemos en 1 día hábil.',
+  'Llamada de 30 minutos para entender tu caso.',
+  'Propuesta con alcance, plazo y precio cerrado.',
+];
+---
+
+<section id="contacto" tabindex="-1" class="relative isolate overflow-hidden border-t border-line py-28 sm:py-40" aria-labelledby="contacto-title">
+  <div
+    class="pointer-events-none absolute -bottom-48 left-1/2 -z-10 h-[32rem] w-[60rem] max-w-none -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)] blur-2xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page grid gap-14 lg:grid-cols-[1fr_1fr] lg:gap-20">
+    <div class="reveal">
+      <p class="eyebrow">Contacto</p>
+      <h2 id="contacto-title" class="text-title mt-5">
+        Tu competencia ya responde en segundos. <em class="font-serif text-[1.08em] font-normal tracking-[-0.02em] text-accent">¿Y tú?</em>
+      </h2>
+      <p class="mt-5 max-w-lg text-lg text-muted">Agenda 30 minutos con tu caso real. Si no vemos cómo ahorrarte plata, no hay segunda reunión.</p>
+
+      <ol class="mt-10 space-y-5">
+        {
+          nextSteps.map((step, i) => (
+            <li class="flex gap-4">
+              <span class="grid size-8 shrink-0 place-items-center rounded-full border border-line-strong font-mono text-xs text-accent">
+                {i + 1}
+              </span>
+              <span class="pt-1 text-muted">{step}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <ul class="mt-12 space-y-3 border-t border-line pt-8">
+        <li>
+          <a href={`mailto:${email}`} class="group inline-flex items-center gap-3 text-fg hover:text-accent">
+            <Icon name="mail" class="size-5 text-muted group-hover:text-accent" />
+            {email}
+          </a>
+        </li>
+        {
+          whatsapp && (
+            <li>
+              <a
+                href={`https://wa.me/${whatsapp}`}
+                class="group inline-flex items-center gap-3 text-fg hover:text-accent"
+                rel="noopener"
+                target="_blank"
+              >
+                <Icon name="chat" class="size-5 text-muted group-hover:text-accent" />
+                Escríbenos por WhatsApp
+                <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+              </a>
+            </li>
+          )
+        }
+        <li>
+          <a
+            href={founder.linkedin}
+            class="group inline-flex items-center gap-3 text-fg hover:text-accent"
+            rel="noopener"
+            target="_blank"
+          >
+            <Icon name="linkedin" class="size-5 text-muted group-hover:text-accent" />
+            {founder.name} en LinkedIn
+            <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+          </a>
+        </li>
+        {
+          location && (
+            <li class="inline-flex items-center gap-3 text-muted">
+              <Icon name="pin" class="size-5" />
+              {location}
+            </li>
+          )
+        }
+      </ul>
+    </div>
+
+    <div class="reveal">
+      <form
+        id="contact-form"
+        class="card space-y-6 p-6 sm:p-8"
+        action={formEndpoint || `mailto:${email}`}
+        method="post"
+        enctype={usesMailto ? 'text/plain' : undefined}
+        data-endpoint={formEndpoint}
+        data-email={email}
+        aria-labelledby="form-title"
+      >
+        <div>
+          <h3 id="form-title" class="text-xl font-medium">Cuéntanos tu caso</h3>
+          <p class="mt-1 text-sm text-muted"><span aria-hidden="true">*</span><span class="visually-hidden">Asterisco:</span> obligatorio</p>
+        </div>
+
+        <!-- Lo que el visitante eligió en Empleados IA o Planes -->
+        <div
+          class="flex items-center gap-3 rounded-2xl border border-accent/40 bg-accent-soft py-2.5 pr-2 pl-4"
+          data-interest
+          hidden
+        >
+          <Icon name="check" class="size-4 shrink-0 text-accent" strokeWidth={2.25} />
+          <p class="min-w-0 flex-1 text-sm">
+            <span class="text-muted">Te interesa:</span>{' '}
+            <strong class="font-medium text-fg" data-interest-label></strong>
+          </p>
+          <button
+            type="button"
+            class="grid size-9 shrink-0 place-items-center rounded-full text-muted transition-colors hover:bg-hover hover:text-fg"
+            data-interest-clear
+          >
+            <span aria-hidden="true">✕</span>
+            <span class="visually-hidden">Quitar selección</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="cf-name">Nombre <span aria-hidden="true" class="text-accent">*</span></label>
+          <input
+            id="cf-name"
+            name="nombre"
+            type="text"
+            class="input"
+            autocomplete="name"
+            enterkeyhint="next"
+            maxlength="100"
+            required
+            data-error="cf-name-error"
+          />
+          <p id="cf-name-error" class="error-msg">
+            <Icon name="alert" class="size-4 shrink-0" strokeWidth={2} />
+            Escribe tu nombre.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="cf-email">Correo electrónico <span aria-hidden="true" class="text-accent">*</span></label>
+          <input
+            id="cf-email"
+            name="email"
+            type="email"
+            class="input"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
+            enterkeyhint="next"
+            maxlength="150"
+            required
+            data-error="cf-email-error"
+          />
+          <p id="cf-email-error" class="error-msg">
+            <Icon name="alert" class="size-4 shrink-0" strokeWidth={2} />
+            Escribe un correo válido, por ejemplo nombre@empresa.com.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="cf-company">Empresa <span class="font-normal text-muted">(opcional)</span></label>
+          <input
+            id="cf-company"
+            name="empresa"
+            type="text"
+            class="input"
+            autocomplete="organization"
+            enterkeyhint="next"
+            maxlength="100"
+          />
+        </div>
+
+        <div class="field">
+          <label for="cf-topic">¿Qué necesitas? <span class="font-normal text-muted">(opcional)</span></label>
+          <select id="cf-topic" name="servicio" class="input">
+            <option value="">Selecciona una opción</option>
+            {contactTopics.map((topic) => <option value={topic}>{topic}</option>)}
+          </select>
+        </div>
+
+        <fieldset class="field">
+          <legend class="mb-2 text-sm font-medium">Tamaño de tu empresa <span class="font-normal text-muted">(opcional)</span></legend>
+          <div class="flex flex-wrap gap-2">
+            {
+              companySizes.map((size) => (
+                <label class="chip">
+                  <input type="radio" name="tamano" value={size} />
+                  {size}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend class="mb-2 text-sm font-medium">
+            Conversaciones al día con clientes <span class="font-normal text-muted">(opcional)</span>
+          </legend>
+          <div class="flex flex-wrap gap-2">
+            {
+              dailyConversations.map((range) => (
+                <label class="chip">
+                  <input type="radio" name="conversaciones" value={range} />
+                  {range}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <input type="hidden" id="cf-plan" name="plan" value="" />
+
+        <div class="field">
+          <label for="cf-message">Mensaje <span aria-hidden="true" class="text-accent">*</span></label>
+          <textarea
+            id="cf-message"
+            name="mensaje"
+            class="input"
+            rows="5"
+            minlength="20"
+            maxlength="3000"
+            required
+            aria-describedby="cf-message-hint"
+            data-error="cf-message-error"></textarea>
+          <p id="cf-message-hint" class="hint">Qué quieres lograr o qué problema tienes hoy.</p>
+          <p id="cf-message-error" class="error-msg">
+            <Icon name="alert" class="size-4 shrink-0" strokeWidth={2} />
+            Cuéntanos un poco más: al menos 20 caracteres.
+          </p>
+        </div>
+
+        <!-- Trampa anti-spam: oculta para personas y lectores de pantalla -->
+        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label for="cf-website">No completar este campo</label>
+          <input id="cf-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <button type="submit" class="btn btn-primary w-full sm:w-auto" data-submit>
+            Quiero mi diagnóstico
+            <Icon name="arrow" strokeWidth={2} />
+          </button>
+          <p class="text-xs text-subtle sm:max-w-[14rem] sm:text-right">
+            Usamos tus datos solo para responderte.{' '}
+            <a href="/privacidad" class="underline underline-offset-2 hover:text-fg">Política de privacidad</a>
+          </p>
+        </div>
+
+        <p id="cf-status" role="status" class="text-sm empty:hidden" data-status></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const fields = () => form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('input, select, textarea');
+
+    /* ── Sincroniza aria-invalid con :user-invalid (errores solo tras interactuar) ── */
+
+    const linkError = (el: HTMLElement, shown: boolean) => {
+      const errorId = el.dataset.error;
+      if (!errorId) return;
+      const ids = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter((id) => id && id !== errorId);
+      if (shown) ids.push(errorId);
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+      else el.removeAttribute('aria-describedby');
+    };
+
+    const announcer = document.createElement('div');
+    announcer.setAttribute('aria-live', 'polite');
+    announcer.className = 'visually-hidden';
+    document.body.append(announcer);
+    let announceTimer: number | undefined;
+    let announcedField: Element | undefined;
+
+    const spokenText = (node: Element) => {
+      const copy = node.cloneNode(true) as Element;
+      copy.querySelectorAll('[aria-hidden="true"]').forEach((n) => n.remove());
+      return (copy.textContent || '').replace(/\s+/g, ' ').trim();
+    };
+
+    const announceError = (el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
+      const error = el.dataset.error && document.getElementById(el.dataset.error);
+      if (!error) return;
+      const label = el.labels?.[0] ? `${spokenText(el.labels[0])}: ` : '';
+      clearTimeout(announceTimer);
+      announcer.textContent = '';
+      announcedField = el;
+      announceTimer = window.setTimeout(() => {
+        announcer.textContent = label + spokenText(error);
+      }, 500);
+    };
+
+    const flagged = new WeakSet<Element>();
+    const announced = new WeakSet<Element>();
+
+    const syncAria = (target: EventTarget | null, announce = false) => {
+      const el = target as HTMLInputElement | null;
+      if (!el?.matches?.('input, select, textarea') || el.name === '_gotcha') return;
+      const invalid = el.matches(':user-invalid');
+      if (invalid) {
+        if (announce && !announced.has(el)) {
+          announceError(el);
+          announced.add(el);
+        }
+        el.setAttribute('aria-invalid', 'true');
+        linkError(el, true);
+        flagged.add(el);
+      } else if (flagged.has(el) || el.getAttribute('aria-invalid') !== 'true') {
+        el.setAttribute('aria-invalid', 'false');
+        linkError(el, false);
+        flagged.delete(el);
+        announced.delete(el);
+        if (announcedField === el) {
+          clearTimeout(announceTimer);
+          announcer.textContent = '';
+        }
+      }
+    };
+
+    fields().forEach((el) => syncAria(el));
+    form.addEventListener('blur', (e) => syncAria(e.target, true), true);
+    form.addEventListener('change', (e) => syncAria(e.target, true), true);
+    form.addEventListener('input', (e) => {
+      if ((e.target as Element).hasAttribute('aria-invalid')) syncAria(e.target);
+    });
+    form.addEventListener(
+      'invalid',
+      (e) => {
+        announced.add(e.target as Element);
+        syncAria(e.target);
+      },
+      true,
+    );
+    form.addEventListener(
+      'reset',
+      () => {
+        setTimeout(() => fields().forEach((el) => syncAria(el)));
+      },
+      true,
+    );
+
+    /* ── Envío ── */
+
+    /* ── Interés elegido en otras secciones (empleado IA o plan) ── */
+
+    const interest = form.querySelector<HTMLElement>('[data-interest]')!;
+    const interestLabel = form.querySelector<HTMLElement>('[data-interest-label]')!;
+    const planField = form.querySelector<HTMLInputElement>('#cf-plan')!;
+    const topicField = form.querySelector<HTMLSelectElement>('#cf-topic')!;
+
+    const setInterest = (label: string, topic?: string) => {
+      planField.value = label;
+      interestLabel.textContent = label;
+      interest.hidden = !label;
+      if (topic && [...topicField.options].some((option) => option.value === topic)) topicField.value = topic;
+    };
+
+    document.addEventListener('amply:interest', (event) => {
+      const { label, topic } = (event as CustomEvent<{ label: string; topic?: string }>).detail;
+      setInterest(label, topic);
+    });
+    form.querySelector('[data-interest-clear]')?.addEventListener('click', () => {
+      setInterest('');
+      topicField.value = '';
+      topicField.focus();
+    });
+    form.addEventListener('reset', () => setTimeout(() => setInterest('')));
+
+    const setStatus = (message: string, tone: 'ok' | 'error' | 'info') => {
+      status.textContent = message;
+      status.className = `text-sm ${tone === 'ok' ? 'text-accent' : tone === 'error' ? 'text-danger' : 'text-muted'}`;
+    };
+
+    // Solo se dispara si la validación nativa pasó (el navegador enfoca el primer campo inválido).
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+
+      // Bot detectado: fingimos éxito sin enviar nada.
+      if (data.get('_gotcha')) {
+        form.reset();
+        setStatus('¡Gracias! Recibimos tu mensaje.', 'ok');
+        return;
+      }
+
+      const endpoint = form.dataset.endpoint;
+      const email = form.dataset.email ?? '';
+
+      if (!endpoint) {
+        const subject = `Nuevo contacto desde la web: ${data.get('nombre')}`;
+        const body = [
+          `Nombre: ${data.get('nombre')}`,
+          `Correo: ${data.get('email')}`,
+          `Empresa: ${data.get('empresa') || '—'}`,
+          `Servicio: ${data.get('servicio') || '—'}`,
+          `Plan de interés: ${data.get('plan') || '—'}`,
+          `Tamaño de empresa: ${data.get('tamano') || '—'}`,
+          `Conversaciones al día: ${data.get('conversaciones') || '—'}`,
+          '',
+          String(data.get('mensaje') ?? ''),
+        ].join('\n');
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        setStatus('Abrimos tu aplicación de correo con el mensaje listo para enviar.', 'info');
+        return;
+      }
+
+      submit.disabled = true;
+      setStatus('Enviando…', 'info');
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        form.reset();
+        setStatus('¡Gracias! Recibimos tu mensaje y te responderemos pronto.', 'ok');
+      } catch {
+        setStatus(`No pudimos enviar el mensaje. Inténtalo de nuevo o escríbenos a ${email}.`, 'error');
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,83 @@
+---
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { aiEmployees } from '../../data/site';
+---
+
+<section id="empleados" tabindex="-1" class="border-t border-line py-28 sm:py-40" aria-labelledby="empleados-title">
+  <div class="container-page">
+    <SectionHeading
+      id="empleados-title"
+      eyebrow="Empleados IA"
+      title="Tu mejor vendedor no duerme. Literal."
+      intro="Atienden por WhatsApp, Instagram y tu web, conectados a tus sistemas. Tú pones las reglas."
+    />
+
+    <p class="reveal mt-10 flex justify-center">
+      <span class="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-1.5 font-mono text-xs text-muted">
+        <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+        {aiEmployees.length} empleados · en línea 24/7
+      </span>
+    </p>
+
+    <fieldset class="mt-8" data-employees>
+      <legend class="visually-hidden">Elige el empleado IA que quieres activar</legend>
+      <div class="stagger grid gap-4 sm:grid-cols-2">
+        {
+          aiEmployees.map((employee, i) => (
+            <label class="card employee-card flex flex-col p-7">
+              <input type="radio" name="empleado-ia" value={employee.role} checked={i === 0} />
+              <span class="flex items-center gap-4">
+                <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent ring-1 ring-accent/20 ring-inset">
+                  <Icon name={employee.icon} class="size-6" />
+                </span>
+                <span class="flex-1 text-xl font-medium">{employee.role}</span>
+                <span class="employee-check" aria-hidden="true">
+                  <Icon name="check" class="size-3.5" strokeWidth={2.5} />
+                </span>
+              </span>
+              <span class="mt-6 flex-1 space-y-2.5">
+                {employee.tasks.map((task) => (
+                  <span class="flex items-start gap-2.5 text-[0.9375rem] text-fg">
+                    <Icon name="check" class="mt-1 size-4 shrink-0 text-accent" strokeWidth={2} />
+                    {task}
+                  </span>
+                ))}
+              </span>
+              <span class="mt-6 block border-t border-line pt-5 font-mono text-xs tracking-wide text-subtle uppercase">
+                Ideal para · <span class="text-muted">{employee.idealFor}</span>
+              </span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <div class="reveal mt-12 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-center">
+      <p class="text-muted">¿Otro rol? Lo diseñamos a tu medida.</p>
+      <a href="#contacto" class="btn btn-primary" data-activate>
+        <span>Activar <span data-activate-role>{aiEmployees[0].role}</span></span>
+        <Icon name="arrow" strokeWidth={2} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-employees]');
+  const roleLabel = document.querySelector<HTMLElement>('[data-activate-role]');
+  const selected = () =>
+    group?.querySelector<HTMLInputElement>('input[name="empleado-ia"]:checked')?.value ?? '';
+
+  // El botón muestra el empleado elegido y lo deja anotado en el formulario de contacto.
+  group?.addEventListener('change', () => {
+    if (roleLabel) roleLabel.textContent = selected();
+  });
+  document.querySelector('[data-activate]')?.addEventListener('click', () => {
+    document.dispatchEvent(
+      new CustomEvent('amply:interest', {
+        detail: { label: selected(), topic: 'Empleado IA (ventas, agenda, cobranza o atención)' },
+      }),
+    );
+  });
+</script>

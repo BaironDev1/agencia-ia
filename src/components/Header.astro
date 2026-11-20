@@ -1,0 +1,135 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { nav } from '../data/site';
+---
+
+<header class="site-header" data-site-header>
+  <div class="container-page">
+  <div class="header-inner">
+    <span class="scroll-progress" aria-hidden="true"></span>
+    <Logo />
+
+    <div class="header-actions">
+    <ThemeToggle />
+    <nav class="site-nav" aria-label="Principal">
+      <button
+        class="menu-button"
+        type="button"
+        popovertarget="site-menu"
+        popovertargetaction="toggle"
+        aria-controls="site-menu"
+      >
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+        <span class="visually-hidden">Menú</span>
+      </button>
+
+      <ul id="site-menu" class="site-menu" popover="auto">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li class="menu-cta">
+          <a href="/#contacto">Agenda 30 minutos</a>
+        </li>
+      </ul>
+    </nav>
+    </div>
+  </div>
+  </div>
+</header>
+
+<script>
+  // Popover es Baseline reciente: solo se carga el polyfill si el navegador no lo soporta.
+  if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+    import('@oddbird/popover-polyfill');
+  }
+
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const inner = header?.querySelector<HTMLElement>('.header-inner');
+  const menu = header?.querySelector<HTMLElement>('#site-menu');
+
+  if (header && inner && menu) {
+    const isOpen = () => menu.matches('.\\:popover-open') || (CSS.supports('selector(:popover-open)') && menu.matches(':popover-open'));
+    let measuredWidth = 0;
+
+    // Muestra el menú en línea solo si la fila completa cabe; si no, lo deja como popover.
+    const updateLayout = () => {
+      const width = header.clientWidth;
+      const wide = header.classList.contains('is-wide');
+      // Colapsado: solo vuelve a medir cuando el header crece (evita parpadeos).
+      if (!wide && measuredWidth && width <= measuredWidth) return;
+      measuredWidth = width;
+
+      const wasOpen = isOpen();
+      header.classList.add('is-measuring', 'is-wide');
+      const fits = inner.scrollWidth <= inner.clientWidth;
+
+      if (fits) {
+        menu.removeAttribute('popover');
+      } else {
+        header.classList.remove('is-wide');
+        if (!menu.hasAttribute('popover')) menu.setAttribute('popover', 'auto');
+        if (wasOpen && !isOpen()) menu.showPopover?.();
+      }
+
+      requestAnimationFrame(() => header.classList.remove('is-measuring'));
+    };
+
+    const observer = new ResizeObserver(updateLayout);
+    observer.observe(header);
+    observer.observe(menu);
+
+    // Medición definitiva cuando ya cargaron estilos y tipografías: si antes se
+    // colapsó por una medida provisoria, aquí vuelve a mostrar los links.
+    const remeasure = () => {
+      measuredWidth = 0;
+      updateLayout();
+    };
+    if (document.readyState === 'complete') remeasure();
+    else window.addEventListener('load', remeasure, { once: true });
+    document.fonts?.ready.then(remeasure);
+
+    // Menú que marca la sección visible: CSS nativo (scroll-target-group) cuando existe,
+    // y un IntersectionObserver como respaldo. aria-current lo comunica a lectores de pantalla.
+    const links = [...menu.querySelectorAll<HTMLAnchorElement>('a[href^="/#"]')].filter(
+      (link) => !link.closest('.menu-cta'),
+    );
+    const setCurrent = (active?: Element | null) => {
+      links.forEach((link) => link.setAttribute('aria-current', String(link === active)));
+    };
+
+    if (CSS.supports('scroll-target-group: auto')) {
+      const sync = () => setCurrent(menu.querySelector('a:target-current'));
+      sync();
+      document.addEventListener('scrollend', sync);
+    } else if ('IntersectionObserver' in window) {
+      const byId = new Map(links.map((link) => [link.hash.slice(1), link]));
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const link = byId.get(entry.target.id);
+            if (!link || !entry.isIntersecting) return;
+            links.forEach((other) => other.classList.toggle('target-current', other === link));
+            setCurrent(link);
+          });
+        },
+        { rootMargin: '-50% 0px -50% 0px' },
+      );
+      byId.forEach((_, id) => {
+        const section = document.getElementById(id);
+        if (section) spy.observe(section);
+      });
+    }
+
+    // Al elegir una sección desde el menú colapsado, se cierra el popover.
+    menu.addEventListener('click', (event) => {
+      if ((event.target as Element).closest('a') && menu.hasAttribute('popover') && isOpen()) {
+        menu.hidePopover?.();
+      }
+    });
+  }
+</script>

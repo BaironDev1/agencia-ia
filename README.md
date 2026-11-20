@@ -1,46 +1,40 @@
-# Astro Starter Kit: Basics
+# Sitio web de la agencia
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+Sitio oficial de la agencia de software e inteligencia artificial, hecho con [Astro](https://astro.build) y [Tailwind CSS](https://tailwindcss.com). Es un sitio estático: se puede publicar en Vercel, Netlify, Cloudflare Pages o cualquier hosting de archivos.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Comandos
 
-## 🚀 Project Structure
+| Comando        | Acción                                                         |
+| :------------- | :------------------------------------------------------------- |
+| `pnpm install` | Instala las dependencias                                       |
+| `pnpm dev`     | Servidor local en `http://localhost:4321`                      |
+| `pnpm build`   | Revisa tipos y genera el sitio en `./dist/`                    |
+| `pnpm preview` | Sirve localmente el sitio ya generado                          |
+| `pnpm images`  | Regenera `public/og.png` y `public/favicon.ico` con el nombre actual |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Dónde editar
+
+- **Textos, servicios, FAQ y datos de contacto:** `src/data/site.ts`. Los valores provisorios están marcados con `TODO`.
+- **Dominio:** `site` en `astro.config.mjs` y `url` en `src/data/site.ts`.
+- **Colores y tipografías:** tokens al inicio de `src/styles/global.css` y fuentes en `astro.config.mjs`.
+- **Secciones de la página:** `src/components/sections/`.
+
+## Formulario de contacto
+
+Si `site.contact.formEndpoint` está vacío, el formulario abre el correo del visitante con el mensaje ya escrito. Para recibir los mensajes directamente, crea un formulario en un servicio como [Formspree](https://formspree.io) o [Web3Forms](https://web3forms.com) y pega su URL en `formEndpoint`. El campo oculto `_gotcha` sirve como trampa anti-spam.
+
+## Estructura
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── components/
+│   ├── sections/      Hero, Servicios, Casos de uso, Proceso, Por qué nosotros, FAQ, Contacto
+│   ├── Header.astro   Navegación (menú popover en móvil)
+│   ├── Footer.astro
+│   ├── Icon.astro
+│   └── Logo.astro
+├── data/site.ts       Todo el contenido editable
+├── layouts/Layout.astro  <head>, SEO, Open Graph y JSON-LD
+├── pages/             index, 404 y robots.txt
+└── styles/global.css  Tokens de diseño y estilos de componentes
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

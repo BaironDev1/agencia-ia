@@ -1,0 +1,40 @@
+---
+import SectionHeading from '../SectionHeading.astro';
+import { steps } from '../../data/site';
+---
+
+<section id="proceso" tabindex="-1" class="border-t border-line py-28 sm:py-40" aria-labelledby="proceso-title">
+  <div class="container-page">
+    <SectionHeading
+      id="proceso-title"
+      eyebrow="Cómo trabajamos"
+      title="De la primera llamada a producción. Sin sorpresas."
+    />
+
+    <div class="process-track relative mt-16">
+      <!-- Línea que conecta los pasos -->
+      <div
+        class="process-line absolute top-5 bottom-5 left-5 w-px bg-gradient-to-b from-accent/60 via-line-strong to-transparent lg:top-5 lg:right-0 lg:bottom-auto lg:left-5 lg:h-px lg:w-auto lg:bg-gradient-to-r"
+        aria-hidden="true"
+      >
+      </div>
+
+      <ol class="stagger relative grid gap-10 lg:grid-cols-4 lg:gap-6">
+      {
+        steps.map((step, i) => (
+          <li class="relative grid grid-cols-[2.5rem_1fr] gap-5 lg:grid-cols-1 lg:gap-0">
+            <span class="process-step-number relative grid size-10 place-items-center rounded-full border border-line-strong bg-ink font-mono text-sm text-accent" style={`--n: ${i}`}>
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="lg:mt-7 lg:pr-4">
+              <p class="font-mono text-xs tracking-wider text-subtle uppercase">{step.duration}</p>
+              <h3 class="mt-2 text-xl font-medium">{step.title}</h3>
+              <p class="mt-3 text-muted">{step.description}</p>
+            </div>
+          </li>
+        ))
+      }
+      </ol>
+    </div>
+  </div>
+</section>

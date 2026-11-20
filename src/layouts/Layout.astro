@@ -1,23 +1,138 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { site } from '../data/site';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = site.description, noindex = false } = Astro.props;
+
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const ogImage = new URL('/og.png', Astro.site ?? site.url);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  email: site.contact.email,
+  areaServed: 'Latinoamérica',
+  knowsAbout: ['Inteligencia artificial', 'Desarrollo de software', 'Automatización de procesos', 'Agentes de IA'],
+  sameAs: site.social.map((s) => s.href).filter(Boolean),
+  founder: {
+    '@type': 'Person',
+    name: site.founder.name,
+    jobTitle: site.founder.role,
+    sameAs: [site.founder.linkedin],
+    ...(site.founder.photo && { image: new URL(site.founder.photo, site.url).href }),
+  },
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline>
+      // Resuelve el tema (día/noche) antes de pintar para evitar un destello.
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+
+        // Aparición escalonada: se prepara antes de pintar para que no haya destello.
+        // Si el script de la página no llega a correr en 3 s, todo se muestra igual.
+        if (matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window) {
+          document.documentElement.classList.add('js-stagger');
+          setTimeout(() => {
+            if (!document.documentElement.dataset.staggerReady) document.documentElement.classList.remove('js-stagger');
+          }, 3000);
+        }
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
+    <Font cssVariable="--font-instrument" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a
+      href="#contenido"
+      class="visually-hidden fixed top-3 left-3 z-[60] rounded-full bg-accent-fill px-4 py-2 text-sm font-medium text-on-accent"
+    >
+      Saltar al contenido
+    </a>
+    <Header />
+    <main id="contenido" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Las cards de .stagger aparecen al entrar en pantalla; las que entran juntas,
+      // en orden de lectura (arriba→abajo, izquierda→derecha) con un pequeño desfase.
+      const root = document.documentElement;
+      if (root.classList.contains('js-stagger')) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries
+              .filter((entry) => entry.isIntersecting)
+              .sort(
+                (a, b) =>
+                  a.boundingClientRect.top - b.boundingClientRect.top ||
+                  a.boundingClientRect.left - b.boundingClientRect.left,
+              )
+              .forEach((entry, index) => {
+                const el = entry.target as HTMLElement;
+                el.style.setProperty('--n', String(index));
+                el.classList.add('is-in');
+                observer.unobserve(el);
+              });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        document.querySelectorAll('.stagger > *').forEach((el) => observer.observe(el));
+        root.dataset.staggerReady = 'true';
+      }
+    </script>
+  </body>
+</html>

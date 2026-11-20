@@ -1,0 +1,83 @@
+---
+import Icon from './Icon.astro';
+
+// Conversación ilustrativa de un empleado IA (no son datos reales).
+const chat = [
+  { from: 'client', text: 'Hola! ¿La SUV 2024 sigue disponible?', time: '03:14' },
+  {
+    from: 'agent',
+    text: '¡Hola! Sí, nos quedan dos: una gris y una blanca 🚙 ¿Te agendo una prueba de manejo?',
+    time: '03:14',
+  },
+  { from: 'client', text: 'Sí, el sábado en la mañana porfa', time: '03:15' },
+  {
+    from: 'agent',
+    text: 'Listo: sábado a las 10:30. Te envío la cotización con opciones de crédito 👇',
+    time: '03:15',
+  },
+]
+---
+
+<figure class="relative w-full">
+  <div
+    class="absolute -inset-px -z-10 rounded-[1.6rem] bg-gradient-to-b from-accent/40 via-line to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="overflow-hidden rounded-[1.55rem] border border-line bg-surface shadow-2xl shadow-shadow">
+    <div class="flex items-center gap-3 border-b border-line bg-raised px-5 py-3.5">
+      <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-fill text-on-accent" aria-hidden="true">
+        <Icon name="car" class="size-5" strokeWidth={1.75} />
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="text-[0.9375rem] font-medium text-fg">Vendedor IA · Tu automotora</p>
+        <p class="flex items-center gap-1.5 text-xs text-muted">
+          <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+          en línea · responde en segundos
+        </p>
+      </div>
+      <span class="rounded-full border border-line px-2 py-0.5 font-mono text-[0.6875rem] tracking-wider text-muted uppercase">
+        Ejemplo
+      </span>
+    </div>
+
+    <ol class="space-y-2.5 p-4 sm:p-5">
+      {
+        chat.map((message, i) => (
+          <li
+            class:list={['console-line flex', message.from === 'agent' ? 'justify-end' : 'justify-start']}
+            style={`--i: ${i}`}
+          >
+            <p
+              class:list={[
+                'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[0.9375rem] leading-snug',
+                message.from === 'agent'
+                  ? 'rounded-br-md bg-accent-soft text-fg ring-1 ring-accent/20 ring-inset'
+                  : 'rounded-bl-md bg-raised text-fg',
+              ]}
+            >
+              <span class="visually-hidden">{message.from === 'agent' ? 'Empleado IA:' : 'Cliente:'}</span>
+              {message.text}
+              <span class="mt-1 block text-right font-mono text-[0.6875rem] text-subtle">{message.time}</span>
+            </p>
+          </li>
+        ))
+      }
+      <li class="console-line flex justify-center pt-1" style={`--i: ${chat.length}`}>
+        <p class="inline-flex items-center gap-2 rounded-full border border-line bg-ink px-3 py-1.5 text-xs text-muted">
+          <Icon name="check" class="size-3.5 text-accent" strokeWidth={2.25} />
+          Prueba de manejo agendada en tu sistema
+        </p>
+      </li>
+    </ol>
+
+    <p class="border-t border-line px-5 py-3.5 text-xs text-muted">
+      Mensaje recibido a las <strong class="font-medium text-fg">3:14 a. m.</strong>: tu empleado IA agendó mientras
+      dormías.
+    </p>
+  </div>
+  <figcaption class="visually-hidden">
+    Ejemplo ilustrativo: un empleado IA responde por WhatsApp de madrugada si una SUV sigue disponible, agenda la prueba
+    de manejo, envía la cotización y lo registra en el sistema de ventas.
+  </figcaption>
+</figure>

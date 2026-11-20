@@ -1,0 +1,140 @@
+---
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import { aiPlans, devPlans, guarantee, pricingNotes } from '../../data/site';
+
+---
+
+<section id="planes" tabindex="-1" class="border-t border-line py-28 sm:py-40" aria-labelledby="planes-title">
+  <div class="container-page">
+    <SectionHeading
+      id="planes-title"
+      eyebrow="Planes"
+      title="Elige por el trabajo que necesitas resuelto."
+      intro="Todos incluyen la puesta en marcha, mejoras cada mes y ayuda por WhatsApp. Sin permanencia. Sin letra chica."
+    />
+
+    <!-- Equipo de desarrollo mensual -->
+    <div class="reveal mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+      <div>
+        <h3 class="font-mono text-xs tracking-wider text-muted uppercase">Equipo de desarrollo mensual</h3>
+        <p class="mt-4 text-2xl font-medium tracking-tight text-balance">
+          Tecnología todo el año. Sin contratar a nadie.
+        </p>
+        <p class="mt-4 text-muted">Pides, entregamos, repetimos. Cuando terminas lo grande, bajas de plan. Lo construido sigue andando.</p>
+        <a href="#contacto" data-plan="Equipo de desarrollo mensual" data-topic="Equipo de desarrollo mensual" class="btn btn-ghost mt-7">
+          Cotizar mi equipo
+          <Icon name="arrow" strokeWidth={2} />
+        </a>
+      </div>
+
+      <ol class="grid gap-3">
+        {
+          devPlans.map((plan, i) => (
+            <li class="card flex items-center gap-5 p-5">
+              <span class="grid size-10 shrink-0 place-items-center rounded-full border border-line-strong bg-ink font-mono text-sm text-accent">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div class="min-w-0 flex-1">
+                <p class="font-medium">{plan.name}</p>
+                <p class="text-sm text-muted">{plan.detail}</p>
+              </div>
+              <p class="shrink-0 text-right">
+                <span class="text-xl font-medium">{plan.price}</span>
+                <span class="block text-xs text-muted">al mes</span>
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+
+    <!-- Empleados IA -->
+    <h3 class="reveal mt-24 font-mono text-xs tracking-wider text-muted uppercase">Planes de empleados IA</h3>
+    <ul class="stagger mt-6 grid gap-4 lg:grid-cols-3">
+      {
+        aiPlans.map((plan) => {
+          const custom = plan.monthly === 'A medida';
+          return (
+            <li
+              class:list={[
+                'card flex flex-col p-7',
+                plan.featured && 'border-accent/50 bg-raised shadow-[0_0_0_1px_rgb(200_242_80/0.15),0_30px_80px_-30px_rgb(200_242_80/0.25)] hover:border-accent/70',
+              ]}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl font-medium">{plan.name}</h4>
+                {plan.featured && (
+                  <span class="rounded-full bg-accent-fill px-2.5 py-1 text-xs font-medium text-on-accent">Recomendado</span>
+                )}
+              </div>
+              <p class="mt-2 text-[0.9375rem] text-muted lg:min-h-[3rem]">{plan.tagline}</p>
+
+              <div class="mt-7">
+                {custom ? (
+                  <p class="text-4xl font-medium tracking-tight">A medida</p>
+                ) : (
+                  <p class="flex items-baseline gap-1.5">
+                    <span class="text-sm text-muted">desde</span>
+                    <span class="text-4xl font-medium tracking-tight">{plan.monthly}</span>
+                    <span class="text-muted">/ mes</span>
+                  </p>
+                )}
+                <p class="mt-2 text-sm text-muted">
+                  {custom ? 'Puesta en marcha y cuota según tu operación' : `+ puesta en marcha desde ${plan.setup} (pago único)`}
+                </p>
+              </div>
+
+              <a
+                href="#contacto"
+                data-plan={`Plan ${plan.name} de empleados IA`}
+                data-topic="Empleado IA (ventas, agenda, cobranza o atención)"
+                class:list={['btn mt-7 w-full', plan.featured ? 'btn-primary' : 'btn-ghost']}
+              >
+                {plan.cta}
+                <Icon name="arrow" strokeWidth={2} />
+              </a>
+
+              <ul class="mt-7 space-y-3 border-t border-line pt-6">
+                {plan.features.map((feature) => (
+                  <li class="flex items-start gap-2.5 text-[0.9375rem]">
+                    <Icon name="check" class="mt-1 size-4 shrink-0 text-accent" strokeWidth={2} />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <!-- Garantía -->
+    <div class="reveal mt-6 flex flex-col gap-5 rounded-[1.25rem] border border-accent/30 bg-accent-soft p-6 sm:flex-row sm:items-center sm:p-7">
+      <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-accent-fill text-on-accent">
+        <Icon name="shield" class="size-6" strokeWidth={1.75} />
+      </span>
+      <div>
+        <p class="text-lg font-medium text-fg">{guarantee.title}</p>
+        <p class="mt-1 text-muted">{guarantee.text}</p>
+      </div>
+    </div>
+
+    <ul class="reveal mt-10 space-y-1.5 text-sm text-subtle">
+      {pricingNotes.map((note) => <li>· {note}</li>)}
+    </ul>
+
+  </div>
+</section>
+
+<script>
+  // Al elegir un plan, el formulario de contacto lo muestra y lo deja anotado.
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element).closest<HTMLElement>('[data-plan]');
+    if (!link) return;
+    document.dispatchEvent(
+      new CustomEvent('amply:interest', { detail: { label: link.dataset.plan ?? '', topic: link.dataset.topic } }),
+    );
+  });
+</script>
