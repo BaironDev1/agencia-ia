@@ -7,7 +7,8 @@ Formulario (amply.cl) → /api/contacto (Pages Function) → service binding CON
 ```
 
 - **Antispam:** Cloudflare Turnstile (verificación en el servidor, con `action` y dominio), campo trampa `_gotcha` y control de origen.
-- **Correo:** binding `send_email` de Cloudflare Email Service. Envía desde `formulario@amply.cl` al correo de destino verificado en Email Routing. Enviar a una dirección verificada es gratis en cualquier plan. "Responder" contesta directo al visitante.
+- **Correo:** binding `send_email` de Cloudflare Email Service. Envía desde `formulario@avisos.amply.cl` al correo de destino verificado en Email Routing. Enviar a una dirección verificada es gratis en cualquier plan. "Responder" contesta directo al visitante.
+- **Por qué `avisos.amply.cl`:** el correo de `amply.cl` vive en Google Workspace (MX de Google), así que el formulario envía desde un subdominio que tiene su propio Email Routing en Cloudflare. No borres las MX/SPF de `avisos.amply.cl`.
 - **Sin URL pública:** `workers.dev` y las URLs de vista previa están desactivadas. Solo se llega por la Pages Function.
 - **Orígenes aceptados:** amply.cl, staging.amply.cl y las vistas previas `*.amply-4fd.pages.dev`. Lo que llega desde fuera de producción trae el asunto marcado `[Prueba …]`.
 

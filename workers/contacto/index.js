@@ -13,7 +13,9 @@
  *   TURNSTILE_SECRET  secreto: clave secreta del widget de Turnstile.
  */
 
-const FROM = { email: 'formulario@amply.cl', name: 'Formulario amply.cl' };
+// Se envía desde un subdominio con Email Routing propio: el correo de amply.cl
+// vive en Google Workspace y no puede usarse como dominio de envío de Cloudflare.
+const FROM = { email: 'formulario@avisos.amply.cl', name: 'Formulario amply.cl' };
 
 /** Orígenes desde los que se acepta el formulario: producción, staging y vistas previas de Pages. */
 const PRODUCTION_HOST = 'amply.cl';
