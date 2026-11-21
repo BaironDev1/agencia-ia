@@ -19,11 +19,11 @@ export const site = {
   locale: 'es_LA',
   contact: {
     // TODO: correo real de contacto.
-    email: 'hola@amply.cl',
+    email: 'contacto@amply.cl',
     // TODO: número de WhatsApp en formato internacional sin "+" ni espacios (ej. 56912345678). Vacío = se oculta.
-    whatsapp: '',
+    whatsapp: '+56957816001',
     // TODO: ciudad / país. Vacío = se oculta.
-    location: 'Latinoamérica · Remoto',
+    location: ' Chile · Remoto',
     /**
      * Endpoint que recibe el formulario por POST (Formspree, Web3Forms, una
      * función serverless propia, etc.). Si queda vacío, el formulario abre el

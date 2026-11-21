@@ -29,16 +29,24 @@
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', current() === 'dark' ? '#0a0a0b' : '#f7f8f3');
   };
 
+  const apply = (next: 'light' | 'dark') => {
+    // Sin transiciones mientras cambian los colores: todo cambia en el mismo cuadro.
+    root.classList.add('theme-switching');
+    root.dataset.theme = next;
+    sync();
+    void root.offsetHeight;
+    requestAnimationFrame(() => root.classList.remove('theme-switching'));
+  };
+
   document.addEventListener('click', (event) => {
     if (!(event.target as Element).closest('[data-theme-toggle]')) return;
     const next = current() === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
     try {
       localStorage.setItem('theme', next);
     } catch {
       /* Navegación privada o almacenamiento bloqueado: el cambio vale solo para esta visita. */
     }
-    sync();
+    apply(next);
   });
 
   sync();

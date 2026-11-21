@@ -340,7 +340,11 @@
 .reveal {
   @media (prefers-reduced-motion: no-preference) {
     @supports ((animation-timeline: view()) and (animation-range: entry)) {
-      animation: rise linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: rise;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: view();
       /* Rango de largo fijo: elementos de una misma fila aparecen juntos aunque midan distinto */
       animation-range: entry 0% entry 9rem;
@@ -410,19 +414,31 @@
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: scroll()) {
       &::before {
-        animation: bar-release linear both;
+        /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+        animation-name: bar-release;
+        animation-duration: auto;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: scroll(root block);
         animation-range: 0 7rem;
       }
 
       .header-inner {
-        animation: pill-drop linear both;
+        /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+        animation-name: pill-drop;
+        animation-duration: auto;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: scroll(root block);
         animation-range: 0 7rem;
       }
 
       .header-inner::before {
-        animation: pill-skin linear both;
+        /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+        animation-name: pill-skin;
+        animation-duration: auto;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: scroll(root block);
         animation-range: 1.5rem 7rem;
       }
@@ -983,16 +999,13 @@ select.input {
   }
 }
 
-/* Transición suave de colores al cambiar de tema */
-@media (prefers-reduced-motion: no-preference) {
-  body,
-  .card,
-  .site-header {
-    transition:
-      background-color 0.3s ease,
-      border-color 0.3s ease,
-      color 0.3s ease;
-  }
+/* Cambio de tema: todo cambia en el mismo instante. Sin transiciones por elemento,
+   que generaban un "lag" escalonado (unos colores cambiaban antes que otros). */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }
 
 /* ───────────────────────── Cards seleccionables de empleados IA ───────────────────────── */
@@ -1447,7 +1460,11 @@ select.input {
 
     .process-line {
       transform-origin: top;
-      animation: grow-y linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: grow-y;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --process;
       animation-range: entry 60% cover 40%;
 
@@ -1458,7 +1475,11 @@ select.input {
     }
 
     .process-step-number {
-      animation: light-up linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: light-up;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --process;
       animation-range: cover calc(14% + var(--n, 0) * 7%) cover calc(18% + var(--n, 0) * 7%);
     }
@@ -1469,13 +1490,21 @@ select.input {
     }
 
     .hero-text-exit {
-      animation: hero-text-out linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: hero-text-out;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --hero;
       animation-range: exit 10% exit 80%;
     }
 
     .hero-visual-exit {
-      animation: hero-visual-out linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: hero-visual-out;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --hero;
       animation-range: exit 0% exit 90%;
     }
@@ -1492,7 +1521,11 @@ select.input {
       background-color: var(--color-accent);
       transform-origin: left;
       pointer-events: none;
-      animation: grow-x linear both;
+      /* Propiedades separadas: el optimizador de CSS no puede fusionarlas en un shorthand inválido */
+      animation-name: grow-x;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: scroll(root block);
     }
   }
