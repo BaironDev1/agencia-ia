@@ -305,7 +305,7 @@ export const faqs = [
   {
     question: '¿Cuánto cuesta?',
     answer:
-      'Los empleados IA parten desde 4 UF al mes más un pago único de puesta en marcha; el detalle está en Planes. El software a medida se cotiza con precio cerrado por etapa, después del diagnóstico gratis.',
+      'Los empleados IA parten desde 3,75 UF al mes más un pago único de puesta en marcha; el detalle está en Planes. El software a medida se cotiza con precio cerrado por etapa, después del diagnóstico gratis.',
   },
   {
     question: '¿Hay permanencia?',
@@ -347,8 +347,12 @@ export const companySizes = ['1 a 4 personas', '5 a 19', '20 a 150', 'Más de 15
 export const dailyConversations = ['Menos de 10', '10 a 100', 'Más de 100', 'No lo sé'];
 
 /* ───────────────────────── Planes ─────────────────────────
- * TODO: TODOS los valores de esta sección son provisorios. Ajusta precios,
- * topes y condiciones a tu realidad antes de publicar. Valores en UF + IVA.
+ * Valores en UF + IVA. Regla de Bairon (2026-11-21): lo más caro del plan
+ * Crecimiento (la puesta en marcha) no supera $1.000.000 neto. Con la UF de
+ * $41.377,93, 23,5 UF = $972.381; revisar el valor si la UF pasa de $42.553.
+ * Los demás valores se ajustaron en la misma proporción (×0,94).
+ * TODO: confirmar condiciones (IVA según la formalización, diagnóstico gratis,
+ * alcance del descuento anual) antes de dar AMP-7 por cerrado.
  */
 
 export const guarantee = {
@@ -368,8 +372,8 @@ export const aiPlans: {
   {
     name: 'Inicial',
     tagline: 'Para responder rápido sin sumar personal.',
-    setup: '15 UF',
-    monthly: '4 UF',
+    setup: '14 UF',
+    monthly: '3,75 UF',
     features: [
       '1 empleado IA',
       'WhatsApp o chat web',
@@ -382,8 +386,8 @@ export const aiPlans: {
   {
     name: 'Crecimiento',
     tagline: 'Para vender por chat, no solo responder.',
-    setup: '25 UF',
-    monthly: '8 UF',
+    setup: '23,5 UF',
+    monthly: '7,5 UF',
     featured: true,
     features: [
       'Hasta 2 empleados IA',
@@ -396,15 +400,17 @@ export const aiPlans: {
   },
   {
     name: 'Escala',
-    tagline: 'Para muchas conversaciones o necesidades propias.',
+    // No es "el plan más caro": es para lo que no calza en los otros dos. El precio
+    // sale del análisis completo de los requerimientos y puede ser menor.
+    tagline: 'Para lo que no calza en Inicial ni Crecimiento.',
     setup: 'A medida',
     monthly: 'A medida',
     features: [
-      'Todos los empleados IA que necesites',
-      'Todos los canales, incluidas llamadas',
-      'Conversaciones a medida',
-      'Conexión con todos tus sistemas',
-      'Una persona a cargo y tiempos de respuesta garantizados',
+      'Empleados IA y canales según tu caso',
+      'Conexión con los sistemas que ya usas',
+      'Llamadas telefónicas, si las necesitas',
+      'Propuesta después de analizar tus requerimientos',
+      'Una persona a cargo de tu cuenta',
     ],
     cta: 'Conversemos',
   },
