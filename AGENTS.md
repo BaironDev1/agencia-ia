@@ -8,6 +8,14 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Branches and staging
+
+- `main` is production: every push deploys to https://amply.cl. Only small, verified changes go straight to `main`.
+- `staging` is a stable test branch: every push deploys to https://staging.amply.cl (Cloudflare Pages preview, same Functions and bindings as production, `noindex`). Larger features go to `staging` first (or a feature branch merged into `staging`), get tested there, and are merged into `main` only after Bairon approves.
+- Other branches get a throwaway preview at `https://<branch>.amply-4fd.pages.dev`.
+- The contact form works on staging and sends real email; subjects are prefixed with `[Prueba …]`.
+- Never push or merge to `main` without Bairon's explicit OK.
+
 ## Design rules
 
 Before changing any page, component, copy or style, read [DESIGN.md](DESIGN.md). Its rules are strict: concise copy in the voice of datawalt.cl, generous spacing, software before AI employees, day and night themes, theme tokens only, no invented testimonials or figures.

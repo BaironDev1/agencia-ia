@@ -37,11 +37,14 @@ export const site = {
     // Línea visible en Contacto. Vacío = se oculta.
     location: 'Puerto Varas, Los Lagos · Remoto en todo Chile',
     /**
-     * Endpoint que recibe el formulario por POST (Formspree, Web3Forms, una
-     * función serverless propia, etc.). Si queda vacío, el formulario abre el
-     * cliente de correo del visitante con el mensaje ya redactado.
+     * Endpoint que recibe el formulario por POST: la Pages Function
+     * functions/api/contacto.js, que lo pasa al Worker workers/contacto y este
+     * lo envía por correo. Si queda vacío, el formulario abre el cliente de
+     * correo del visitante con el mensaje ya redactado.
      */
-    formEndpoint: '',
+    formEndpoint: '/api/contacto',
+    /** Clave pública del widget de Cloudflare Turnstile (antispam del formulario). */
+    turnstileSiteKey: '0x4AAAAAAGLyokD8xXnAEMgI',
   },
   // TODO: perfiles reales. Los que queden con href vacío no se muestran.
   social: [
@@ -56,14 +59,14 @@ export const site = {
    */
   /**
    * Datos legales para la política de privacidad (/privacidad).
-   * TODO: completa con los datos reales de tu empresa antes de publicar.
+   * Amply aún no es una empresa constituida: el responsable de los datos es el
+   * fundador como persona natural. Cuando exista la empresa, cambia `holder`
+   * por la razón social y agrega su RUT.
    */
   legal: {
-    company: 'TODO Razón social',
-    rut: 'TODO 00.000.000-0',
-    address: 'TODO Dirección, comuna, Santiago, Chile',
+    holder: 'Bairon Ampuero, persona natural',
     privacyEmail: 'contacto@amply.cl',
-    updated: '19 de noviembre de 2026',
+    updated: '21 de noviembre de 2026',
   },
   founder: {
     name: 'Bairon Ampuero',

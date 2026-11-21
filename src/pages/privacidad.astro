@@ -2,14 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import { site } from '../data/site';
 
-const { legal } = site;
+const { legal, area } = site;
 
 const sections = [
   {
     id: 'responsable',
     title: 'Quién es responsable de tus datos',
     body: [
-      `${legal.company}, RUT ${legal.rut}, con domicilio en ${legal.address} ("${site.name}").`,
+      `${legal.holder}, que ofrece sus servicios con el nombre "${site.name}" desde ${area.city}, ${area.region}.`,
       `Para cualquier consulta sobre tus datos, escríbenos a ${legal.privacyEmail}.`,
     ],
   },
@@ -18,6 +18,7 @@ const sections = [
     title: 'Qué datos recogemos',
     body: [
       'Solo los que tú nos entregas en el formulario de contacto: nombre, correo, empresa, el servicio o plan que te interesa, el tamaño de tu empresa, las conversaciones diarias con clientes y tu mensaje.',
+      'Para frenar el spam, el formulario usa Cloudflare Turnstile, que revisa datos técnicos de tu navegador y tu dirección IP. Solo se usan para comprobar que eres una persona.',
       'No pedimos datos sensibles. Por favor no los incluyas en tu mensaje.',
     ],
   },
@@ -40,16 +41,15 @@ const sections = [
     id: 'destinatarios',
     title: 'Con quién los compartimos',
     body: [
-      'Solo con los proveedores que necesitamos para operar: el servicio de correo y el de recepción del formulario. Ellos tratan tus datos por encargo nuestro y bajo nuestras instrucciones.',
+      'Solo con los proveedores que necesitamos para operar: Cloudflare, que aloja este sitio, recibe el formulario, verifica que no seas un robot y nos envía tu mensaje por correo, y Google, donde está nuestro correo. Ellos tratan tus datos por encargo nuestro y bajo nuestras instrucciones.',
       'Algunos de esos proveedores pueden almacenar datos fuera de Chile. En ese caso exigimos que mantengan un nivel de protección adecuado.',
     ],
   },
   {
     id: 'plazo',
     title: 'Cuánto tiempo los guardamos',
-    // TODO: confirma el plazo de conservación que vas a aplicar.
     body: [
-      'Mientras dure la conversación comercial y hasta 24 meses después del último contacto si no llegamos a trabajar juntos. Luego los eliminamos.',
+      'Mientras dure la conversación comercial y, si no llegamos a trabajar juntos, como máximo 12 meses desde el último contacto. Luego los eliminamos.',
     ],
   },
   {
@@ -66,6 +66,7 @@ const sections = [
     title: 'Cookies',
     body: [
       'Este sitio no usa cookies de publicidad ni de seguimiento. Solo guarda en tu navegador si prefieres el modo día o noche, y esa preferencia nunca sale de tu dispositivo.',
+      'La verificación antispam del formulario (Cloudflare Turnstile) se carga solo cuando llegas al formulario y no se usa para publicidad.',
     ],
   },
   {
