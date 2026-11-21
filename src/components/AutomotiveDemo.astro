@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+import { automotiveDemo as demo } from '../data/site';
+---
+
+<section id="demo-automotora" class="col-span-full mx-auto w-full max-w-4xl overflow-hidden rounded-3xl border border-line bg-surface" aria-labelledby="demo-automotora-title">
+  <header class="flex items-center justify-between gap-4 border-b border-line px-4 py-3 sm:px-7 sm:py-4">
+    <h3 id="demo-automotora-title" class="flex items-center gap-2.5 font-medium text-fg">
+      <Icon name="calendar" class="size-5 text-accent" />{demo.title}
+    </h3>
+    <span class="font-mono text-xs text-muted">{demo.label}</span>
+  </header>
+  <div class="grid sm:grid-cols-[0.9fr_1.1fr]">
+    <figure class="grid grid-cols-[5.5rem_minmax(0,1fr)] items-center gap-3 border-b border-line bg-raised px-4 py-3 sm:block sm:border-r sm:border-b-0 sm:p-0">
+      <img src="/demo-jeep-commander.webp" alt={demo.imageAlt} width="900" height="600" loading="lazy" decoding="async"
+        class="aspect-[1.25] w-full rounded-lg object-cover sm:aspect-[1.5] sm:rounded-none" />
+      <figcaption class="sm:px-7 sm:py-4">
+        <p class="text-base font-semibold leading-tight text-fg sm:text-lg">{demo.vehicle}</p>
+        <p class="mt-1 text-sm text-muted">{demo.stock}</p>
+      </figcaption>
+    </figure>
+    <div class="scene grid min-w-0 p-4 sm:p-7">
+      {demo.steps.map((step) => (
+        <div class="scene-step flex flex-col items-start gap-3 sm:gap-4">
+          <div class="grid w-full gap-3">
+            {step.messages.map((message, index) => {
+              const outgoing = 'outgoing' in message;
+              return (
+                <div
+                  class:list={['max-w-full', { 'justify-self-end text-right': outgoing }]}
+                  tabindex={index === 0 ? -1 : undefined}
+                >
+                  <p class="mb-1.5 text-xs font-medium text-muted">{message.sender}</p>
+                  <blockquote class:list={[
+                    'w-fit rounded-2xl px-4 py-2.5 text-base leading-snug text-fg',
+                    outgoing ? 'rounded-br-sm bg-accent-soft text-left' : 'rounded-bl-sm bg-raised',
+                  ]}>{message.text}</blockquote>
+                </div>
+              );
+            })}
+          </div>
+          {'booking' in step && (
+            <section class="w-full overflow-hidden rounded-xl border border-line bg-ink" aria-labelledby="demo-agenda-title">
+              <header class="flex items-center justify-between gap-2 border-b border-line px-3 py-2 text-xs">
+                <h4 id="demo-agenda-title" class="flex items-center gap-2 font-medium text-fg">
+                  <Icon name="calendar" class="size-4 text-accent" />{step.booking.calendar}
+                </h4>
+                <span class="text-muted">{step.booking.day}</span>
+              </header>
+              <div class="grid grid-cols-[auto_1fr] items-baseline gap-2 p-2.5">
+                <time datetime={step.booking.time} class="font-mono text-xs text-muted">{step.booking.time}</time>
+                <div class="calendar-event rounded-md border-l-2 border-accent bg-accent-soft px-3 py-2">
+                  <p class="flex items-center gap-1.5 text-sm font-medium text-fg">
+                    <Icon name="check" class="size-4 shrink-0 text-accent" />{step.booking.status}
+                  </p>
+                  <p class="mt-0.5 text-xs text-muted">{demo.vehicle} · {step.booking.location}</p>
+                  <p class="text-xs text-muted">{step.booking.assignee}</p>
+                </div>
+              </div>
+            </section>
+          )}
+          <button type="button" class:list={['scene-action btn w-full whitespace-normal sm:mt-auto sm:w-auto', 'booking' in step ? 'btn-ghost' : 'btn-primary']}>
+            {step.action}
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .scene { gap: 1.5rem; }
+  .scene-action { display: none; }
+  .scene[data-ready] { gap: 0; }
+  .scene[data-ready] .scene-step[inert] { display: none; }
+  @media (width >= 40rem) {
+    .scene[data-ready] .scene-step { grid-area: 1 / 1; }
+    .scene[data-ready] .scene-step[inert] { display: flex; visibility: hidden; }
+  }
+  .scene[data-ready] .scene-action { display: inline-flex; }
+  @media (prefers-reduced-motion: no-preference) {
+    .scene[data-ready] .scene-step:not([inert]) { animation: rise 220ms ease-out; }
+    .scene[data-ready] .scene-step:not([inert]) .calendar-event {
+      animation: book-visit 300ms ease-out 540ms backwards;
+    }
+    @keyframes book-visit {
+      from { opacity: 0; transform: translateY(4px); }
+    }
+  }
+</style>
+
+<script>
+  const scene = document.querySelector<HTMLElement>('#demo-automotora .scene');
+  if (scene) {
+    const steps = [...scene.querySelectorAll<HTMLElement>('.scene-step')];
+    steps.forEach((step, index) => {
+      step.inert = index !== 0;
+      step.querySelector('button')?.addEventListener('click', () => {
+        const next = steps[(index + 1) % steps.length];
+        step.inert = true;
+        next.inert = false;
+        next.querySelector<HTMLElement>('[tabindex]')?.focus({ preventScroll: true });
+      });
+    });
+    scene.dataset.ready = '';
+  }
+</script>

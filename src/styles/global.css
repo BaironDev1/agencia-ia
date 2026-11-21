@@ -15,8 +15,8 @@
   --raised: #18181b;
   --line: rgb(255 255 255 / 0.08);
   --line-strong: rgb(255 255 255 / 0.16);
-  --line-hover: var(--color-line-hover);
-  --hover: var(--color-hover);
+  --line-hover: rgb(255 255 255 / 0.32);
+  --hover: rgb(255 255 255 / 0.06);
   --fg: #eeeeea;
   --muted: #a1a1a7;
   --subtle: #808087;
@@ -709,34 +709,6 @@
   from {
     opacity: 0;
     scale: 0.97 0.85;
-  }
-}
-
-/* ───────────────────────── Consola demo del hero ───────────────────────── */
-
-.console-line {
-  @media (prefers-reduced-motion: no-preference) {
-    animation: rise 0.5s var(--ease-out-quart) both;
-    animation-delay: calc(var(--i, 0) * 420ms + 700ms);
-  }
-}
-
-.console-caret {
-  display: inline-block;
-  inline-size: 0.5rem;
-  block-size: 1em;
-  vertical-align: -0.15em;
-  background-color: var(--color-accent);
-
-  @media (prefers-reduced-motion: no-preference) {
-    /* Parpadea unas pocas veces y se detiene (sin animaciones infinitas) */
-    animation: caret 1s steps(1) 6;
-  }
-}
-
-@keyframes caret {
-  50% {
-    opacity: 0;
   }
 }
 
@@ -1541,12 +1513,8 @@ select.input {
   }
 }
 
-/* 5. Menú que marca la sección visible (con respaldo por JavaScript) */
-.site-menu {
-  scroll-target-group: auto;
-}
-
-.site-header .site-menu a:is(:target-current, .target-current) {
+/* 5. Menú que marca la sección visible */
+.site-header .site-menu a[aria-current="location"] {
   color: var(--color-accent);
 }
 
@@ -1568,7 +1536,7 @@ select.input {
     transition: opacity 0.2s;
   }
 
-  &:is(:target-current, .target-current) {
+  &[aria-current="location"] {
     color: var(--color-fg);
 
     &::before {

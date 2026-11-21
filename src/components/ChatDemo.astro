@@ -1,51 +1,32 @@
 ---
 import Icon from './Icon.astro';
-
-// Conversación ilustrativa de un empleado IA (no son datos reales).
-const chat = [
-  { from: 'client', text: 'Hola! ¿La SUV 2024 sigue disponible?', time: '03:14' },
-  {
-    from: 'agent',
-    text: '¡Hola! Sí, nos quedan dos: una gris y una blanca 🚙 ¿Te agendo una prueba de manejo?',
-    time: '03:14',
-  },
-  { from: 'client', text: 'Sí, el sábado en la mañana porfa', time: '03:15' },
-  {
-    from: 'agent',
-    text: 'Listo: sábado a las 10:30. Te envío la cotización con opciones de crédito 👇',
-    time: '03:15',
-  },
-]
+import { chatDemo } from '../data/site';
 ---
 
-<figure class="relative w-full">
+<figure class="relative w-full" aria-labelledby="chat-demo-title" aria-describedby="chat-demo-label">
   <div
-    class="absolute -inset-px -z-10 rounded-[1.6rem] bg-gradient-to-b from-accent/40 via-line to-transparent"
+    class="absolute -inset-px -z-10 rounded-[1.6rem] bg-linear-to-b from-accent/40 via-line to-transparent"
     aria-hidden="true"
   >
   </div>
   <div class="overflow-hidden rounded-[1.55rem] border border-line bg-surface shadow-2xl shadow-shadow">
     <div class="flex items-center gap-3 border-b border-line bg-raised px-5 py-3.5">
-      <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-fill text-on-accent" aria-hidden="true">
-        <Icon name="car" class="size-5" strokeWidth={1.75} />
+      <span class="grid size-10 shrink-0 place-items-center rounded-full bg-ink ring-1 ring-accent/25" aria-hidden="true">
+        <span class="mascot relative block size-[70%] text-accent">
+          <span class="mascot-eyes"></span>
+        </span>
       </span>
-      <div class="min-w-0 flex-1">
-        <p class="text-[0.9375rem] font-medium text-fg">Vendedor IA · Tu automotora</p>
-        <p class="flex items-center gap-1.5 text-xs text-muted">
-          <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
-          en línea · responde en segundos
-        </p>
-      </div>
-      <span class="rounded-full border border-line px-2 py-0.5 font-mono text-[0.6875rem] tracking-wider text-muted uppercase">
-        Ejemplo
+      <p id="chat-demo-title" class="min-w-0 flex-1 text-[0.9375rem] font-medium text-fg">{chatDemo.title}</p>
+      <span id="chat-demo-label" class="shrink-0 rounded-full border border-line px-2 py-0.5 font-mono text-[0.6875rem] tracking-wider text-muted uppercase">
+        {chatDemo.label}
       </span>
     </div>
 
     <ol class="space-y-2.5 p-4 sm:p-5">
       {
-        chat.map((message, i) => (
+        chatDemo.messages.map((message, i) => (
           <li
-            class:list={['console-line flex', message.from === 'agent' ? 'justify-end' : 'justify-start']}
+            class:list={['chat-line flex', message.from === 'agent' ? 'justify-end' : 'justify-start']}
             style={`--i: ${i}`}
           >
             <p
@@ -56,28 +37,75 @@ const chat = [
                   : 'rounded-bl-md bg-raised text-fg',
               ]}
             >
-              <span class="visually-hidden">{message.from === 'agent' ? 'Empleado IA:' : 'Cliente:'}</span>
+              <span class="visually-hidden">{message.from === 'agent' ? `${chatDemo.title}:` : 'Cliente:'}</span>
               {message.text}
               <span class="mt-1 block text-right font-mono text-[0.6875rem] text-subtle">{message.time}</span>
             </p>
           </li>
         ))
       }
-      <li class="console-line flex justify-center pt-1" style={`--i: ${chat.length}`}>
-        <p class="inline-flex items-center gap-2 rounded-full border border-line bg-ink px-3 py-1.5 text-xs text-muted">
-          <Icon name="check" class="size-3.5 text-accent" strokeWidth={2.25} />
-          Prueba de manejo agendada en tu sistema
-        </p>
-      </li>
     </ol>
 
-    <p class="border-t border-line px-5 py-3.5 text-xs text-muted">
-      Mensaje recibido a las <strong class="font-medium text-fg">3:14 a. m.</strong>: tu empleado IA agendó mientras
-      dormías.
-    </p>
+    <div class="chat-line border-t border-line bg-raised px-4 py-3.5 sm:px-5" style={`--i: ${chatDemo.messages.length}`}>
+      <p class="flex items-center gap-2 text-sm font-medium text-fg">
+        <Icon name="check" class="size-4 shrink-0 text-accent" strokeWidth={2.25} aria-hidden="true" />
+        {chatDemo.bookingTitle}
+      </p>
+      <dl class="mt-2.5 grid grid-cols-3 gap-2 text-xs">
+        {chatDemo.booking.map(({ label, value }) => (
+          <div>
+            <dt class="text-muted">{label}</dt>
+            <dd class="mt-0.5 font-medium text-fg">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   </div>
-  <figcaption class="visually-hidden">
-    Ejemplo ilustrativo: un empleado IA responde por WhatsApp de madrugada si una SUV sigue disponible, agenda la prueba
-    de manejo, envía la cotización y lo registra en el sistema de ventas.
-  </figcaption>
 </figure>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .chat-line {
+      animation: rise 0.5s var(--ease-out-quart) both;
+      animation-delay: calc(var(--i, 0) * 420ms + 700ms);
+    }
+  }
+
+  .mascot::before,
+  .mascot::after {
+    position: absolute;
+    bottom: 4%;
+    width: 55%;
+    background: currentColor;
+    content: '';
+  }
+
+  .mascot::before {
+    left: 0;
+    height: 70%;
+    border-radius: 50% 50% 0 30% / 40% 40% 0 20%;
+  }
+
+  .mascot::after {
+    right: 0;
+    height: 92%;
+    border-radius: 50% 50% 30% 0 / 31% 31% 15% 0;
+  }
+
+  .mascot-eyes {
+    position: absolute;
+    z-index: 1;
+    inset: 52% 27% auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mascot-eyes::before,
+  .mascot-eyes::after {
+    width: 29%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-ink);
+    content: '';
+  }
+</style>

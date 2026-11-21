@@ -1,4 +1,5 @@
 ---
+import AutomotiveDemo from '../AutomotiveDemo.astro';
 import Icon from '../Icon.astro';
 import SectionHeading from '../SectionHeading.astro';
 import { industries, softwarePillars } from '../../data/site';
@@ -33,37 +34,41 @@ import { industries, softwarePillars } from '../../data/site';
       <div class="mt-10">
         {
           industries.map((industry) => (
-            <div class="rubro-panel stagger" aria-label={`Qué cambia en ${industry.name}`} role="group">
-              <div class="rubro-card rubro-card--today">
-                <p class="rubro-label">Hoy</p>
-                <p class="rubro-text">
-                  <s>{industry.today}</s>
-                </p>
-              </div>
+            <div class:list={['rubro-panel', { stagger: industry.id !== 'automotora' }]} aria-label={`Qué cambia en ${industry.name}`} role="group">
+              {industry.id === 'automotora' ? <AutomotiveDemo /> : (
+                <>
+                  <div class="rubro-card rubro-card--today">
+                    <p class="rubro-label">Hoy</p>
+                    <p class="rubro-text">
+                      <s>{industry.today}</s>
+                    </p>
+                  </div>
 
-              <span class="rubro-arrow" aria-hidden="true">
-                <Icon name="arrow" class="size-5" />
-              </span>
+                  <span class="rubro-arrow" aria-hidden="true">
+                    <Icon name="arrow" class="size-5" />
+                  </span>
 
-              <div class="rubro-card">
-                <p class="rubro-label">
-                  <Icon name="code" class="size-4" />
-                  Software Amply
-                </p>
-                <p class="rubro-text">{industry.software}</p>
-              </div>
+                  <div class="rubro-card">
+                    <p class="rubro-label">
+                      <Icon name="code" class="size-4" />
+                      Software Amply
+                    </p>
+                    <p class="rubro-text">{industry.software}</p>
+                  </div>
 
-              <span class="rubro-arrow rubro-arrow--plus" aria-hidden="true">
-                +
-              </span>
+                  <span class="rubro-arrow rubro-arrow--plus" aria-hidden="true">
+                    +
+                  </span>
 
-              <div class="rubro-card rubro-card--ai">
-                <p class="rubro-label">
-                  <Icon name="agent" class="size-4" />
-                  Empleado IA
-                </p>
-                <p class="rubro-text">{industry.ai}</p>
-              </div>
+                  <div class="rubro-card rubro-card--ai">
+                    <p class="rubro-label">
+                      <Icon name="agent" class="size-4" />
+                      Empleado IA
+                    </p>
+                    <p class="rubro-text">{industry.ai}</p>
+                  </div>
+                </>
+              )}
             </div>
           ))
         }

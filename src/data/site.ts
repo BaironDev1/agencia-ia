@@ -136,6 +136,62 @@ export const aiEmployees: {
   },
 ];
 
+const confirmedTestDrive = {
+  vehicle: 'SUV blanco',
+  time: 'Mañana a las 16:00',
+  assignee: 'Equipo de ventas',
+} as const;
+
+export const chatDemo = {
+  title: 'Asistente de ventas IA',
+  label: 'Ejemplo',
+  messages: [
+    { from: 'client', text: 'Hola, ¿sigue disponible el SUV blanco que tienen publicado?', time: '03:14' },
+    { from: 'agent', text: 'Sí, sigue disponible. ¿Quieres venir a probarlo? Tengo hora mañana a las 11:00 o a las 16:00.', time: '03:14' },
+    { from: 'client', text: 'A las 16:00 me sirve.', time: '03:15' },
+    { from: 'agent', text: 'Listo, agendé tu prueba de manejo para mañana a las 16:00. Tu vendedor ya tiene los datos de la visita.', time: '03:15' },
+  ],
+  bookingTitle: 'Prueba de manejo agendada',
+  booking: [
+    { label: 'Vehículo', value: confirmedTestDrive.vehicle },
+    { label: 'Visita', value: confirmedTestDrive.time },
+    { label: 'Vendedor', value: confirmedTestDrive.assignee },
+  ],
+} as const;
+
+export const automotiveDemo = {
+  vehicle: 'Jeep Commander',
+  imageAlt: 'Jeep Commander blanco visto de frente y de costado.',
+  stock: 'Su dueño lo trae al local con hora previa.',
+  label: 'Ejemplo',
+  title: 'Coordinar una visita',
+  steps: [
+    {
+      messages: [{ sender: 'Comprador', text: 'Voy mañana a Puerto Varas. ¿Puedo ver el Jeep a las 16:00?' }],
+      action: 'Consultar al dueño',
+    },
+    {
+      messages: [{ sender: 'Dueño del Jeep', text: 'A las 16:00 sigo trabajando. Puedo llevarlo al local a las 17:30.' }],
+      action: 'Proponer 17:30 al comprador',
+    },
+    {
+      messages: [
+        { sender: 'Automotora al comprador', text: 'El dueño puede llevar el Jeep al local a las 17:30. ¿Te sirve?', outgoing: true },
+        { sender: 'Comprador', text: 'Sí, mañana a las 17:30 me sirve.' },
+      ],
+      action: 'Volver a probar',
+      booking: {
+        calendar: 'Agenda de la automotora',
+        day: 'Mañana',
+        status: 'Visita confirmada',
+        time: '17:30',
+        location: 'Local de Puerto Varas',
+        assignee: 'Atiende Paula',
+      },
+    },
+  ],
+} as const;
+
 /**
  * Software por rubro: "Elige tu rubro y mira qué cambia". Cada rubro muestra
  * cómo funciona hoy, qué software construimos y qué hace el empleado IA.
@@ -152,9 +208,9 @@ export const industries: {
     id: 'automotora',
     name: 'Automotora',
     icon: 'car',
-    today: 'Cotizaciones en Excel y clientes interesados que se pierden en WhatsApp personales.',
-    software: 'Cotizador con stock y crédito, y cada cliente con su vendedor asignado.',
-    ai: 'Responde, cotiza y agenda la prueba de manejo 24/7.',
+    today: 'El cliente escribe y alguien tiene que confirmar dónde y cuándo puede ver el auto.',
+    software: 'Stock y visitas en un solo lugar, con un responsable para cada consulta.',
+    ai: 'Confirma la visita si hay hora o deja la coordinación pendiente.',
   },
   {
     id: 'clinica',
