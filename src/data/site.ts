@@ -14,15 +14,28 @@ export const site = {
   // Eslogan de la marca: la "m" del logo, con el segundo arco más alto, lo representa.
   slogan: 'Amplificamos tu negocio',
   tagline: 'Amplificamos tu negocio con software e IA',
+  /** Título de la página de inicio en Google y al compartir (≈60 caracteres). */
+  seoTitle: 'Amply · Software e IA en Los Lagos · Amplificamos tu negocio',
   description:
-    'Agencia de desarrollo de software e inteligencia artificial. Creamos agentes de IA, automatizaciones y productos digitales a medida para empresas de Latinoamérica.',
-  locale: 'es_LA',
+    'Agencia de software e IA en Puerto Varas. Sistemas a medida y empleados IA por WhatsApp para empresas de Los Lagos y, en remoto, de todo Chile.',
+  locale: 'es_CL',
+  lang: 'es-CL',
+  /**
+   * SEO regional: Amply es una empresa de área de servicio (sin dirección pública).
+   * Base en Puerto Varas; atiende presencialmente Los Lagos y en remoto todo Chile.
+   */
+  area: {
+    city: 'Puerto Varas',
+    region: 'Región de Los Lagos',
+    country: 'CL',
+    cities: ['Puerto Varas', 'Puerto Montt', 'Osorno', 'Frutillar', 'Llanquihue', 'Castro', 'Ancud'],
+  },
   contact: {
     email: 'contacto@amply.cl',
-    // TODO: número de WhatsApp en formato internacional sin "+" ni espacios (ej. 56912345678). Vacío = se oculta.
+    // WhatsApp en formato internacional sin "+" ni espacios. Vacío = se oculta.
     whatsapp: '56957816001',
-    // TODO: ciudad / país. Vacío = se oculta.
-    location: 'Chile · Remoto',
+    // Línea visible en Contacto. Vacío = se oculta.
+    location: 'Puerto Varas, Los Lagos · Remoto en todo Chile',
     /**
      * Endpoint que recibe el formulario por POST (Formspree, Web3Forms, una
      * función serverless propia, etc.). Si queda vacío, el formulario abre el

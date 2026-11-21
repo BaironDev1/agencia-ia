@@ -60,6 +60,14 @@ Tomamos de Datawalt su **espaciado generoso**, su **concisión** y su **tono**. 
 
 - La política de privacidad vive en `/privacidad` y se enlaza desde el formulario y el pie de página. Si el formulario pide un dato nuevo, se agrega también a la política.
 
+## SEO regional y GEO
+
+- Amply es una empresa de **área de servicio**: base en Puerto Varas, Los Lagos; remoto en todo Chile. Sin dirección física pública.
+- El SEO va en el código, no en el texto visible: título y descripción (`seoTitle`, `description`), idioma `es-CL`, datos estructurados (`ProfessionalService`, `WebSite`, `FAQPage`) y `/llms.txt`. Todo sale de `src/data/site.ts`.
+- Prohibido: relleno de palabras clave, bloques de texto para SEO y páginas por ciudad sin contenido real (páginas puerta).
+- Mantener abierto el acceso a los rastreadores de IA (GPTBot, ClaudeBot, PerplexityBot, Google-Extended): no activar el bloqueo de bots de IA en Cloudflare ni restringirlos en `robots.txt`.
+- Mismo nombre, ciudad, teléfono y descripción en la web, Google Business Profile, LinkedIn y directorios.
+
 ## Contenido editable
 
 Todo el texto, precios y datos viven en `src/data/site.ts`. Los valores provisorios se marcan con `TODO` y no se publican sin confirmar.

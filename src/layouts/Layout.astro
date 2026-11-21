@@ -3,7 +3,7 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { site } from '../data/site';
+import { aiEmployees, faqs, site, softwarePillars } from '../data/site';
 
 interface Props {
   title?: string;
@@ -13,32 +13,105 @@ interface Props {
 
 const { title, description = site.description, noindex = false } = Astro.props;
 
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const pageTitle = title ? `${title} · ${site.name}` : site.seoTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
 const ogImage = new URL('/og.png', Astro.site ?? site.url);
+const isHome = Astro.url.pathname === '/';
+const abs = (path: string) => new URL(path, site.url).href;
 
-const jsonLd = {
-  '@context': 'https://schema.org',
+/*
+ * Datos estructurados (schema.org) para Google y motores de IA.
+ * Amply es una empresa de área de servicio: ciudad y región, sin dirección.
+ */
+const orgId = `${site.url}/#amply`;
+const telephone = site.contact.whatsapp ? `+${site.contact.whatsapp}` : undefined;
+
+const organization = {
   '@type': 'ProfessionalService',
+  '@id': orgId,
   name: site.name,
+  slogan: site.slogan,
   url: site.url,
+  logo: abs('/icon-512.png'),
+  image: abs('/og.png'),
   description: site.description,
   email: site.contact.email,
-  areaServed: 'Latinoamérica',
-  knowsAbout: ['Inteligencia artificial', 'Desarrollo de software', 'Automatización de procesos', 'Agentes de IA'],
-  sameAs: site.social.map((s) => s.href).filter(Boolean),
+  ...(telephone && { telephone }),
+  priceRange: '$$',
+  currenciesAccepted: 'CLP',
+  knowsLanguage: ['es', 'en'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.area.city,
+    addressRegion: site.area.region,
+    addressCountry: site.area.country,
+  },
+  areaServed: [
+    ...site.area.cities.map((name) => ({ '@type': 'City', name })),
+    { '@type': 'AdministrativeArea', name: site.area.region },
+    { '@type': 'Country', name: 'Chile' },
+  ],
+  knowsAbout: [
+    'Desarrollo de software a medida',
+    'Automatización de procesos',
+    'Agentes de inteligencia artificial',
+    'Atención automatizada por WhatsApp',
+    'Desarrollo web y móvil',
+  ],
+  ...(telephone && {
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      telephone,
+      email: site.contact.email,
+      areaServed: 'CL',
+      availableLanguage: ['Spanish', 'English'],
+    },
+  }),
+  sameAs: [...site.social.map((s) => s.href).filter(Boolean)],
   founder: {
     '@type': 'Person',
     name: site.founder.name,
     jobTitle: site.founder.role,
     sameAs: [site.founder.linkedin],
-    ...(site.founder.photo && { image: new URL(site.founder.photo, site.url).href }),
+    ...(site.founder.photo && { image: abs(site.founder.photo) }),
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de Amply',
+    itemListElement: [
+      ...softwarePillars.map((p) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: p.title } })),
+      ...aiEmployees.map((e) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: e.role, description: e.tasks.join('. ') },
+      })),
+    ],
   },
 };
+
+const graph: Record<string, unknown>[] = [
+  organization,
+  { '@type': 'WebSite', '@id': `${site.url}/#web`, url: site.url, name: site.name, inLanguage: site.lang, publisher: { '@id': orgId } },
+];
+
+// Preguntas frecuentes: Google puede mostrarlas y los motores de IA las citan.
+if (isHome) {
+  graph.push({
+    '@type': 'FAQPage',
+    inLanguage: site.lang,
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question.replace(/[«»]/g, ''),
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  });
+}
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={site.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -80,6 +153,8 @@ const jsonLd = {
     <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content={site.locale} />
     <meta property="og:title" content={pageTitle} />
+    <meta name="geo.region" content="CL-LL" />
+    <meta name="geo.placename" content={site.area.city} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />

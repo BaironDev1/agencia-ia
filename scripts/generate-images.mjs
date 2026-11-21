@@ -69,6 +69,8 @@ header.writeUInt32LE(icon32.length, 14); // tamaño
 header.writeUInt32LE(22, 18); // offset
 await writeFile(path('public/favicon.ico'), Buffer.concat([header, icon32]));
 await sharp(Buffer.from(svgs['simbolo-app.svg']), { density: 600 }).resize(180, 180).png().toFile(path('public/apple-touch-icon.png'));
+// Logo cuadrado público para Google y datos estructurados (schema.org "logo")
+await sharp(Buffer.from(svgs['simbolo-app.svg']), { density: 600 }).resize(512, 512).png().toFile(path('public/icon-512.png'));
 
 /* ── public/og.png (1200×630) ── */
 const logo = await sharp(Buffer.from(svgs['wordmark-noche.svg']), { density: 600 }).resize({ width: 280 }).png().toBuffer();
