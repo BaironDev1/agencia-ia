@@ -14,6 +14,8 @@ La "m" de **amply** tiene el segundo arco más alto y en verde: *amplificar*, de
 
 **El símbolo y el wordmark nunca van juntos:** la "m" se repetiría. Usa uno u otro según el espacio.
 
+**Firma de correo:** `public/brand/firma-amply.png`, el wordmark `-dia` sobre placa blanca, publicado en `https://amply.cl/brand/firma-amply.png`. Se muestra a 122 × 54 px. No cambies esa ruta: las firmas ya enviadas la usan.
+
 ## Qué versión usar según el fondo
 
 | Fondo | Versión |

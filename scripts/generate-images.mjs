@@ -72,6 +72,21 @@ await sharp(Buffer.from(svgs['simbolo-app.svg']), { density: 600 }).resize(180, 
 // Logo cuadrado público para Google y datos estructurados (schema.org "logo")
 await sharp(Buffer.from(svgs['simbolo-app.svg']), { density: 600 }).resize(512, 512).png().toFile(path('public/icon-512.png'));
 
+/* ── public/brand/firma-amply.png (logo para la firma de correo) ── */
+// Wordmark -dia sobre placa blanca con margen: se lee en correos claros y, en el
+// modo oscuro de Gmail (que no invierte imágenes), queda como una placa clara.
+// Se muestra a 1/3 de su tamaño (≈122 × 54 px) para verse nítido en pantallas retina.
+await mkdir(path('public/brand'), { recursive: true });
+const sigPad = 18;
+const sigWordmark = await sharp(Buffer.from(svgs['wordmark-dia.svg']), { density: 600 }).resize({ width: 330 }).png().toBuffer();
+const { width: sigLogoW, height: sigLogoH } = await sharp(sigWordmark).metadata();
+const sigW = sigLogoW + sigPad * 2;
+const sigH = sigLogoH + sigPad * 2;
+await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${sigW}" height="${sigH}"><rect width="${sigW}" height="${sigH}" rx="12" fill="${c.white}"/></svg>`))
+  .composite([{ input: sigWordmark, left: sigPad, top: sigPad }])
+  .png({ compressionLevel: 9 })
+  .toFile(path('public/brand/firma-amply.png'));
+
 /* ── public/og.png (1200×630) ── */
 const logo = await sharp(Buffer.from(svgs['wordmark-noche.svg']), { density: 600 }).resize({ width: 280 }).png().toBuffer();
 const og = `
@@ -100,4 +115,4 @@ const og = `
 </svg>`;
 await sharp(Buffer.from(og)).composite([{ input: logo, left: 80, top: 78 }]).png().toFile(path('public/og.png'));
 
-console.log(`✓ brand/ (${Object.keys(svgs).length} SVG + 9 PNG), favicon y og.png generados`);
+console.log(`✓ brand/ (${Object.keys(svgs).length} SVG + 9 PNG), favicon, og.png y logo de firma generados`);
