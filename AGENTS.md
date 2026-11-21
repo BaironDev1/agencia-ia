@@ -22,7 +22,17 @@ All pending work for Amply lives in Linear: workspace **AmplyDev**, team **AMP**
 - **When it's done**, move it to `Done` with a comment saying what changed (commit, URL or setting). Use `Canceled` with the reason if it no longer applies.
 - **Priority:** 1 Urgent = hurts site visitors today · 2 High = needed to start selling · 3 Medium = visibility and trust · 4 Low = setup and housekeeping.
 - **Labels:** one area (`Web`, `Comercial`, `Infraestructura`, `SEO y marca`, `Legal`) plus `Requiere a Bairon` when it is blocked on a decision, data or a step in his own accounts.
+- **Milestones** (project Amply): `1 · Listo para vender`, `2 · Primeros contactos`, `3 · Primer cliente`. Put new issues in the milestone they unblock; housekeeping stays without one.
 - Don't put passwords, tokens or API keys in issues.
+
+### Sales pipeline (project Ventas)
+
+Project **Ventas** (https://linear.app/amplydev/project/ventas-687fce448cec) holds one issue per prospect. Before creating a prospect, search Ventas (including canceled issues) so a discarded company isn't prospected again.
+
+- **Stage:** label group `Etapa`, one at a time: `1 · Por contactar` (Todo) → `2 · Contactado` / `3 · Demo` / `4 · Propuesta` (In Progress) → `5 · Ganado` (Done) or `6 · Perdido` (Canceled, with the reason).
+- **Every contact is a comment** on the prospect's issue: date, channel, what was said or agreed. Keep a next step with a due date on active prospects.
+- **Description sections:** Contacto, Lo que vimos, Qué ofrecerle, Siguiente paso. Only publicly listed or prospect-provided contact data.
+- **Never send a message to a prospect** without Bairon's explicit approval; never in bulk.
 
 ## Documentation
 
