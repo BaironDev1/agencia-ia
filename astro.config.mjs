@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: reemplazar por el dominio definitivo (mismo valor que `site.url` en src/data/site.ts).
-  site: 'https://www.amply.cl',
+  // Dominio definitivo (mismo valor que `site.url` en src/data/site.ts). www redirige aquí.
+  site: 'https://amply.cl',
   integrations: [sitemap()],
   fonts: [
     {

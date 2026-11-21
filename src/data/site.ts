@@ -9,8 +9,8 @@
 
 export const site = {
   name: 'Amply',
-  // TODO: dominio definitivo (también se usa en astro.config.mjs).
-  url: 'https://www.amply.cl',
+  // Dominio definitivo (también se usa en astro.config.mjs). www.amply.cl redirige aquí.
+  url: 'https://amply.cl',
   // Eslogan de la marca: la "m" del logo, con el segundo arco más alto, lo representa.
   slogan: 'Amplificamos tu negocio',
   tagline: 'Amplificamos tu negocio con software e IA',
@@ -18,12 +18,11 @@ export const site = {
     'Agencia de desarrollo de software e inteligencia artificial. Creamos agentes de IA, automatizaciones y productos digitales a medida para empresas de Latinoamérica.',
   locale: 'es_LA',
   contact: {
-    // TODO: correo real de contacto.
     email: 'contacto@amply.cl',
     // TODO: número de WhatsApp en formato internacional sin "+" ni espacios (ej. 56912345678). Vacío = se oculta.
-    whatsapp: '+56957816001',
+    whatsapp: '56957816001',
     // TODO: ciudad / país. Vacío = se oculta.
-    location: ' Chile · Remoto',
+    location: 'Chile · Remoto',
     /**
      * Endpoint que recibe el formulario por POST (Formspree, Web3Forms, una
      * función serverless propia, etc.). Si queda vacío, el formulario abre el
@@ -50,7 +49,7 @@ export const site = {
     company: 'TODO Razón social',
     rut: 'TODO 00.000.000-0',
     address: 'TODO Dirección, comuna, Santiago, Chile',
-    privacyEmail: 'hola@amply.cl',
+    privacyEmail: 'contacto@amply.cl',
     updated: '19 de noviembre de 2026',
   },
   founder: {
