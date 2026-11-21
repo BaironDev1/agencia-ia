@@ -307,10 +307,10 @@ const nextSteps = [
     const flagged = new WeakSet<Element>();
     const announced = new WeakSet<Element>();
 
-    const syncAria = (target: EventTarget | null, announce = false) => {
+    const syncAria = (target: EventTarget | null, announce = false, showError = false) => {
       const el = target as HTMLInputElement | null;
       if (!el?.matches?.('input, select, textarea') || el.name === '_gotcha') return;
-      const invalid = el.matches(':user-invalid');
+      const invalid = !el.validity.valid && (showError || flagged.has(el) || el.matches(':user-invalid'));
       if (invalid) {
         if (announce && !announced.has(el)) {
           announceError(el);
@@ -340,15 +340,22 @@ const nextSteps = [
     form.addEventListener(
       'invalid',
       (e) => {
-        announced.add(e.target as Element);
-        syncAria(e.target);
+        const field = e.target as HTMLInputElement;
+        if (!field.dataset.error) return;
+        e.preventDefault();
+        syncAria(field, false, true);
+        if (field === form.querySelector(':invalid')) field.focus();
       },
       true,
     );
     form.addEventListener(
       'reset',
       () => {
-        setTimeout(() => fields().forEach((el) => syncAria(el)));
+        setTimeout(() => fields().forEach((el) => {
+          flagged.delete(el);
+          el.removeAttribute('aria-invalid');
+          syncAria(el);
+        }));
       },
       true,
     );
@@ -385,7 +392,7 @@ const nextSteps = [
       status.className = `text-sm ${tone === 'ok' ? 'text-accent' : tone === 'error' ? 'text-danger' : 'text-muted'}`;
     };
 
-    // Solo se dispara si la validación nativa pasó (el navegador enfoca el primer campo inválido).
+    // Solo se dispara si la validación nativa pasó.
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const data = new FormData(form);
